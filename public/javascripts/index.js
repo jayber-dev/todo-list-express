@@ -1,0 +1,1 @@
+let wow = document.querySelectorAll('.delete')

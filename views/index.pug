@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  a(href="/page") go to wow
+
+  
+  each val in toList
+    div(class="container")
+      p(class="todo-item")= val['todo'] 
+      p(class="delete") x
+      script(src="/javascripts/index.js") 

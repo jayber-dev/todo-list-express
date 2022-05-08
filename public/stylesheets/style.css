@@ -1,0 +1,21 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    border-bottom: 1px solid;
+}
+
+.todo-item {
+    width: 150px;
+}
+
+h1 {
+    background-color: #09b9ff;
+}
+
+a {
+    color: #00B7FF;
+}
