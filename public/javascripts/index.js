@@ -1,4 +1,15 @@
-var deleteElem = document.querySelectorAll(".del-item")
+function removeItem(e, itemData, x) {
+    setTimeout(() => {
+        e.defaultPrevented;
+    }, 0)
 
-debugger
-console.log(deleteElem)
+    itemData.parentElement.remove();
+    const req = new XMLHttpRequest();
+    req.open("GET", '#');
+    req.send(body = `${x}`)
+
+    console.log(e)
+
+}
+
+document.getElementById('del-1')

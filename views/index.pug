@@ -9,5 +9,5 @@ block content
   each val in toList
     div(class="container")
       p(class="todo-item")= val['todo'] 
-      p(class="del-item" id=`del-${val['id']}`) x
+      p(class="del-item" id=`del-${val['id']}` onclick=`removeItem(event,this, ${val["id"]})`) x
       script(src="/javascripts/index.js" defer) 

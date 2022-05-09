@@ -13,5 +13,9 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express', toList: data });
 });
 
+router.post('/', (req, res, next) => {
+
+})
+
 
 module.exports = router;
