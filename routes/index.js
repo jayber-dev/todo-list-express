@@ -13,8 +13,13 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express', toList: data });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/handle', (req, res, next) => {
 
+    req.on('data', chunk => {
+        console.log(chunk)
+    })
+    console.log('im in the post method')
+    res.render('index', { title: 'Express', toList: data });
 })
 
 

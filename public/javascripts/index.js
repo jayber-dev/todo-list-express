@@ -5,7 +5,8 @@ function removeItem(e, itemData, x) {
 
     itemData.parentElement.remove();
     const req = new XMLHttpRequest();
-    req.open("GET", '#');
+    req.open("POST", '/handle', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.send(body = `${x}`)
 
     console.log(e)
