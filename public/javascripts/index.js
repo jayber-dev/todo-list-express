@@ -7,7 +7,7 @@ function removeItem(e, itemData, x) {
     const req = new XMLHttpRequest();
     req.open("POST", '/handle', true);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.send(body = `${x}`)
+    req.send(body = `itemId=${x}`)
 
     console.log(e)
 
