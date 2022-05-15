@@ -1,13 +1,4 @@
 [{
-        "id": 0,
-        "todo": "go home"
-    },
-    {
-        "id": 1,
-        "todo": "buy milk"
-    },
-    {
-        "id": 2,
-        "todo": "buy number"
-    }
-]
+    "id": "0",
+    "todo": "wow"
+}]
