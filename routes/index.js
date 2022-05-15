@@ -15,9 +15,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/handle', (req, res, next) => {
 
-    req.on('data', chunk => {
-        console.log(chunk)
-    })
+    console.log(req.body)
     console.log('im in the post method')
     res.render('index', { title: 'Express', toList: data });
 })
