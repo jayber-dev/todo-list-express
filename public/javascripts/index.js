@@ -13,4 +13,10 @@ function removeItem(e, itemData, x) {
 
 }
 
+document.getElementById('iteminput').addEventListener('keyup', (e) => {
+    if (e.key == "Enter") {
+        console.log(e.target.id)
+        e.target.value = ""
+    }
+})
 document.getElementById('del-1')
