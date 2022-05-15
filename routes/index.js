@@ -4,7 +4,6 @@ const fs = require('fs');
 const { send } = require('process');
 const app = require('../app');
 const data = require("../data.json")
-const jsonEditor = require('edit-json-file');
 const { json } = require('express');
 var router = express.Router();
 
@@ -21,17 +20,15 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express', toList: data });
 });
 
-// -------------------- POST METHOD HANDLER -----------------------
+// -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 router.post('/handle', (req, res, next) => {
-<<<<<<< HEAD
-
-    console.log(req.body)
-=======
     let bodyData = req.body;
->>>>>>> cb4e056581a7c49912c1a31ef7468a432c0c04af
     console.log('im in the post method')
     let toRemove = Number(bodyData.itemId)
     data.splice(toRemove, 1)
+    for (let i = 0; i < data.length; i++) {
+        data[i].id = i
+    }
     fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
         if (err) {
             console.log(err)
@@ -39,6 +36,31 @@ router.post('/handle', (req, res, next) => {
         }
         console.log('wrote new data')
     })
+    res.render('index', { title: 'Express', toList: data });
+})
+
+router.post('/addItem', (req, res, next) => {
+    let itemId
+    console.log("im inside the additem")
+        // console.log(req.body)
+    if (data.length == 0) {
+        itemId = 0
+    } else {
+        itemId = data.length
+    }
+    let dataToAppend = {
+        "id": itemId,
+        "todo": req.body.content
+    }
+    data.push(dataToAppend);
+    fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+        console.log('data updated')
+    })
+
     res.render('index', { title: 'Express', toList: data });
 })
 

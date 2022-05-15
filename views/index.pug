@@ -3,11 +3,14 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  a(href="/page") go to wow
-  input( type="text" name="todoItem" id="iteminput")
+  a(href="/page") go to wow 
+  br
+  div(class="input-container")
+    input(type="text" name="todoItem" id="iteminput")
+    p press enter
   
   each val in toList
     div(class="container")
       p(class="todo-item")= val['todo'] 
       p(class="del-item" id=`del-${val['id']}` onclick=`removeItem(event,this, ${val["id"]})`) x
-      script(src="/javascripts/index.js" defer) 
+       

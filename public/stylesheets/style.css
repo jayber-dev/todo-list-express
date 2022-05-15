@@ -3,6 +3,20 @@ body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.input-container {
+    display: flex;
+}
+
+.input-container p {
+    height: 20px;
+    margin: 0;
+    font-size: large;
+}
+
+input {
+    height: 20px;
+}
+
 .container {
     display: flex;
     border-bottom: 1px solid;
