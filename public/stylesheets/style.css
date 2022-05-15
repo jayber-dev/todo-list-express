@@ -3,22 +3,55 @@ body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.input-container {
+.header {
     display: flex;
 }
 
-.input-container p {
-    height: 20px;
-    margin: 0;
-    font-size: large;
+a {
+    color: #00B7FF;
+}
+
+h1,
+h3 {
+    text-align: center;
+    background-color: #09b9ff;
 }
 
 input {
     height: 20px;
 }
 
-.container {
+.input-container {
+    align-items: center;
     display: flex;
+    margin: 5px;
+    justify-content: center;
+}
+
+label {
+    font-size: large;
+}
+
+.input-container p {
+    align-items: center;
+    height: 20px;
+    margin: 0;
+    padding-left: 10px;
+    font-size: large;
+}
+
+.global {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-high {
+    display: flex;
+    width: fit-content;
+    border-bottom: 1px solid;
+}
+
+.container-medium {
     border-bottom: 1px solid;
 }
 
@@ -26,10 +59,6 @@ input {
     width: 150px;
 }
 
-h1 {
-    background-color: #09b9ff;
-}
-
-a {
-    color: #00B7FF;
+p {
+    padding-left: 5px;
 }

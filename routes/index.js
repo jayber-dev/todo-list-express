@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
         }
         console.log(data)
     })
-    res.render('index', { title: 'Express', toList: data });
+    res.render('index', { title: 'TO_DO LIST', toList: data });
 });
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
@@ -25,6 +25,9 @@ router.post('/handle', (req, res, next) => {
     let bodyData = req.body;
     console.log('im in the post method')
     let toRemove = Number(bodyData.itemId)
+    console.log(toRemove)
+    console.log(typeof toRemove)
+    console.log(`toremove: ${toRemove}`)
     data.splice(toRemove, 1)
     for (let i = 0; i < data.length; i++) {
         data[i].id = i
@@ -36,9 +39,11 @@ router.post('/handle', (req, res, next) => {
         }
         console.log('wrote new data')
     })
+    console.log(data)
     res.render('index', { title: 'Express', toList: data });
 })
 
+// ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
 router.post('/addItem', (req, res, next) => {
     let itemId
     console.log("im inside the additem")
@@ -59,8 +64,8 @@ router.post('/addItem', (req, res, next) => {
             return
         }
         console.log('data updated')
-    })
 
+    })
     res.render('index', { title: 'Express', toList: data });
 })
 

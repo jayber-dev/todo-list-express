@@ -2,15 +2,23 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
-  a(href="/page") go to wow 
+  div(class="header")
+    img(src="public/todo-icon.jpg", alt="")
+    h3 Welcome
+  //- a(href="/page") go to wow 
   br
   div(class="input-container")
-    input(type="text" name="todoItem" id="iteminput")
-    p press enter
+    label(for="todoItem") Enter a task
+    input(type="text" name="todoItem" id="iteminput" focus)
+    p Press enter
   
-  each val in toList
-    div(class="container")
-      p(class="todo-item")= val['todo'] 
-      p(class="del-item" id=`del-${val['id']}` onclick=`removeItem(event,this, ${val["id"]})`) x
+  div(class="global")
+    each val in toList
+      div(class="container-high")
+        p(class="todo-item")= val['todo'] 
+        p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+
+  div(class='container-medium')
+    p nana 
+    p kaka
        
