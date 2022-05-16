@@ -66,7 +66,7 @@ router.post('/addItem', (req, res, next) => {
         console.log('data updated')
 
     })
-    res.render('index', { title: 'Express', toList: data });
+
 })
 
 

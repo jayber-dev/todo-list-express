@@ -42,7 +42,7 @@ label {
 
 .global {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .container-high {
@@ -52,7 +52,9 @@ label {
 }
 
 .container-medium {
+    margin-left: 10px;
     border-bottom: 1px solid;
+    width: fit-content;
 }
 
 .todo-item {
@@ -61,4 +63,8 @@ label {
 
 p {
     padding-left: 5px;
+}
+
+.del-item {
+    cursor: pointer;
 }

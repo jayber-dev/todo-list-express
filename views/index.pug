@@ -3,7 +3,7 @@ extends layout
 block content
   h1= title
   div(class="header")
-    img(src="public/todo-icon.jpg", alt="")
+    //- img(src="../public/todo-icon.jpg", alt="")
     h3 Welcome
   //- a(href="/page") go to wow 
   br
@@ -13,12 +13,14 @@ block content
     p Press enter
   
   div(class="global")
-    each val in toList
-      div(class="container-high")
-        p(class="todo-item")= val['todo'] 
-        p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
-
-  div(class='container-medium')
-    p nana 
-    p kaka
+    div(class="cont")
+      each val in toList
+        div(class="container-high")
+          p(class="todo-item")= val['todo'] 
+          p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+          
+    div(class="cont")
+      div(class='container-medium')
+        p nana 
+        p kaka
        
