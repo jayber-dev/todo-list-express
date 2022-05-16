@@ -19,23 +19,31 @@ block content
       p(class="urgent-high") high
       each val in toList
         if (val["priority"] == 1)
-          div(class="container-high" draggable="true")
+          div(class="container-high drag" draggable="true")
             p(class="todo-item")= val['todo'] 
             p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+      div(class='container-low drag drop-box')
+            p(class="todo-item dummy-item") Drag item here
+            p(class="del-item" onclick=`removeItem(event,this)`) x 
 
     div(class="cont-med")
       p(class="urgent-medium") medium
       each val in toList
         if (val['priority'] == 2)
-          div(class='container-medium' draggable="true")
+          div(class='container-medium drag' draggable="true")
             p(class="todo-item")= val['todo'] 
             p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+      div(class='container-low drag drop-box')
+            p(class="todo-item dummy-item") Drag item here
+            p(class="del-item" onclick=`removeItem(event,this)`) x 
 
     div(class="cont-low")
       p(class="urgent-low") low
       each val in toList
         if (val['priority'] == 3)
-          div(class='container-low' draggable="true")
+          div(class='container-low drag' draggable="true")
             p(class="todo-item")= val['todo'] 
             p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
-       
+      div(class='container-low drag drop-box')
+            p(class="todo-item dummy-item") Drag item here
+            p(class="del-item" onclick=`removeItem(event,this)`) x 

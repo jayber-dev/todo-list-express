@@ -176,3 +176,12 @@ p {
         justify-content: center;
     }
 }
+
+.drop-box {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dummy-item:hover {
+    background-color: transparent;
+}

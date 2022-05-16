@@ -2,7 +2,6 @@ const removeElem = document.querySelectorAll('.del-item')
 
 // ------------------- REMOVE ITEMS FROM TODO LIST -----------------------------
 function removeItem(e, itemData) {
-    console.log(e)
     itemData.parentElement.remove();
     const req = new XMLHttpRequest();
     req.open("POST", '/handle', true);
@@ -21,3 +20,21 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
         document.location.reload(true)
     }
 })
+
+const dragItemElems = document.querySelectorAll('.drag')
+
+dragItemElems.forEach(() => {
+    addEventListener('dragstart', (e) => {
+        e.target.style.opacity = "0.3"
+        e.target.style.color = "blue"
+    })
+})
+
+dragItemElems.forEach(() => {
+    addEventListener('dragend', (e) => {
+        e.target.style.opacity = "1"
+        e.target.style.color = "black"
+
+    })
+})
+console.log(dragItemElems)
