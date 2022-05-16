@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&family=Bebas+Neue&family=Send+Flowers&display=swap');
+
+/* font-family: 'Akshar', sans-serif; 
+/* font-family: 'Bebas Neue', cursive; 
+/* font-family: 'Send Flowers', cursive; */
+
 body {
     background-image: url('../pics/watercolor-4117017.png');
+    background-size: cover;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     font-family: 'Akshar', sans-serif;
@@ -62,11 +68,12 @@ label {
 .global-list {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     margin-top: 20px;
 }
 
 .container-high {
+    cursor: grab;
     display: flex;
     width: fit-content;
     border-bottom: 1px solid;
@@ -76,12 +83,14 @@ label {
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
+    cursor: grab;
 }
 
 .container-low {
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
+    cursor: grab;
 }
 
 .urgent-high {
@@ -148,4 +157,22 @@ p {
 
 .del-item {
     cursor: pointer;
+}
+
+@media screen and (max-width: 700px) {
+    .global-list {
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+    }
+    .container-high {
+        display: flex;
+        align-content: flex-end;
+    }
+    .urgent-high {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+    }
 }
