@@ -1,26 +1,41 @@
 extends layout
 
 block content
-  h1= title
+  
   div(class="header")
-    //- img(src="../public/todo-icon.jpg", alt="")
-    h3 Welcome
+    div
+      img(src="../pics/todo-icon.jpg", alt="" class="logo")
+      h1= title
+
   //- a(href="/page") go to wow 
   br
   div(class="input-container")
-    label(for="todoItem") Enter a task
+    label(for="todoItem") Enter a task - &nbsp
     input(type="text" name="todoItem" id="iteminput" focus)
     p Press enter
   
-  div(class="global")
-    div(class="cont")
+  div(class="global-list")
+    div(class="cont-high")
+      p(class="urgent-high") high
       each val in toList
-        div(class="container-high")
-          p(class="todo-item")= val['todo'] 
-          p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
-          
-    div(class="cont")
-      div(class='container-medium')
-        p nana 
-        p kaka
+        if (val["priority"] == 1)
+          div(class="container-high")
+            p(class="todo-item")= val['todo'] 
+            p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+
+    div(class="cont-med")
+      p(class="urgent-medium") medium
+      each val in toList
+        if (val['priority'] == 2)
+          div(class='container-medium')
+            p(class="todo-item")= val['todo'] 
+            p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+
+    div(class="cont-low")
+      p(class="urgent-low") low
+      each val in toList
+        if (val['priority'] == 3)
+          div(class='container-low')
+            p(class="todo-item")= val['todo'] 
+            p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
        

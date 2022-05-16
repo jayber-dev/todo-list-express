@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
         }
         console.log(data)
     })
-    res.render('index', { title: 'TO_DO LIST', toList: data });
+    res.render('index', { title: "Manage your task's", toList: data });
 });
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
@@ -47,17 +47,19 @@ router.post('/handle', (req, res, next) => {
 router.post('/addItem', (req, res, next) => {
     let itemId
     console.log("im inside the additem")
-        // console.log(req.body)
     if (data.length == 0) {
         itemId = 0
     } else {
         itemId = data.length
     }
+    console.log(req.body)
     let dataToAppend = {
         "id": itemId,
+        "priority": req.body.priority,
         "todo": req.body.content
     }
     data.push(dataToAppend);
+    console.log(data)
     fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
         if (err) {
             console.log(err)

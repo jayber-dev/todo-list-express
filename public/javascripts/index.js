@@ -17,7 +17,7 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
         const req = new XMLHttpRequest();
         req.open("post", "addItem", true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        req.send(body = `content=${userValue}`)
+        req.send(body = `content=${userValue}&priority=${e.target.high = 1}`)
         document.location.reload(true)
     }
 })
