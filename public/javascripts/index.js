@@ -27,14 +27,33 @@ dragItemElems.forEach(() => {
     addEventListener('dragstart', (e) => {
         e.target.style.opacity = "0.3"
         e.target.style.color = "blue"
-    })
-})
+        e.dataTransfer.dropEffect = 'move'
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        console.log(e.dataTransfer.getData('dropEffect'));
+    }, false)
+    addEventListener('dragenter', (e) => {
+        e.target.classList.add('over')
+    }, false)
 
-dragItemElems.forEach(() => {
+    addEventListener('dragover', (e) => {
+        if (e.preventDefault) {
+            e.preventDefault(); // Necessary. Allows us to drop.
+        }
+
+        e.dataTransfer.dropEffect = 'move';
+    }, false)
+    addEventListener('dragleave', (e) => {
+        e.target.classList.remove('over')
+    })
     addEventListener('dragend', (e) => {
         e.target.style.opacity = "1"
         e.target.style.color = "black"
-
-    })
+    }, false)
 })
+
+// dragItemElems.forEach(() => {
+
+
+//     })
+// })
 console.log(dragItemElems)

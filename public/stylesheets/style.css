@@ -178,8 +178,14 @@ p {
 }
 
 .drop-box {
+    min-width: 216px;
     opacity: 0.5;
     cursor: not-allowed;
+    background-color: rgba(128, 128, 128, 0.226);
+}
+
+.drop-box.over {
+    border: 2px dashed #000;
 }
 
 .dummy-item:hover {
