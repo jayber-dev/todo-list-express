@@ -22,7 +22,7 @@ block content
           div(class="container-high drag" draggable="true")
             p(class="todo-item")= val['todo'] 
             p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
-      div(class='container-low drop-box')
+      div(class='drop-box')
             p(class="todo-item dummy-item") Drag item here
            
 
@@ -33,7 +33,7 @@ block content
           div(class='container-medium drag' draggable="true")
             p(class="todo-item")= val['todo'] 
             p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
-      div(class='container-low drop-box')
+      div(class='drop-box')
             p(class="todo-item dummy-item") Drag item here
             
 
@@ -44,6 +44,6 @@ block content
           div(class='container-low drag' draggable="true")
             p(class="todo-item")= val['todo'] 
             p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
-      div(class='container-low drop-box')
+      div(class=' drop-box')
             p(class="todo-item dummy-item") Drag item here
             

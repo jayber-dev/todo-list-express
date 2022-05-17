@@ -1,1 +1,1 @@
-[{ "id": 0, "priority": "1", "todo": "wow" }, { "id": 1, "priority": "2", "todo": "todo dragable objects" }, { "id": 2, "priority": "3", "todo": "to work" }, { "id": 3, "priority": "1", "todo": "to make somthing" }, { "id": 4, "priority": "2", "todo": "go shopping" }, { "id": 5, "priority": "1", "todo": "go to tanents" }]
+[{"id":0,"priority":"2","todo":"todo dragable objects"},{"id":1,"priority":"3","todo":"to make somthing"},{"id":2,"priority":"2","todo":"go shopping"},{"id":3,"priority":"1","todo":"go to tanents"},{"id":4,"priority":"1","todo":"go biking"}]

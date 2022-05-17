@@ -24,34 +24,34 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
 const dragItemElems = document.querySelectorAll('.drag');
 const dropContainerElem = document.querySelectorAll('.drop-box')
 let dragDataElem
+let targetElem
 
 dragItemElems.forEach(() => {
     addEventListener('dragstart', (e) => {
-
         e.dataTransfer.dropEffect = 'move';
         e.target.style.opacity = "0.3";
-        e.target.style.color = "blue";
         dragDataElem = e.target
         console.log(e);
     }, false)
     addEventListener('dragend', (e) => {
-
         e.target.style.opacity = "1"
         e.target.style.color = "black"
         console.log('event ended');
+        console.log(e);
+        targetElem.parentElement.classList = "container-medium drag"
+        targetElem.parentElement.innerHTML = dragDataElem.innerHTML
+            // dragDataElem.remove()
     }, false)
 })
 
 dropContainerElem.forEach(() => {
-    addEventListener('dragenter', (e) => {
+    addEventListener('dragover', (e) => {
         e.dataTransfer.dropEffect = 'move';
-        if (e.target.className == "container-low drop-box" || e.target.className == "p.todo-item.dummy-item") {
-            if (e.preventDefault) {
-                e.preventDefault(); // Necessary. Allows us to drop.
-            }
-
+        e.preventDefault(); // Necessary. Allows us to drop.
+        if (e.target.className == "container-low drop-box" || e.target.className == "todo-item dummy-item") {
             console.log(e)
             e.target.classList.add('over')
+            targetElem = e.target
         }
     })
     addEventListener('dragleave', (e) => {
