@@ -37,9 +37,10 @@ dragItemElems.forEach(() => {
         const curElem = targetElem.parentElement
         e.target.style.opacity = "1"
         e.target.style.color = "black"
-        console.log(targetElem.parentElement.parentElement.parentElement)
+            // console.log(targetElem.parentElement.parentElement.parentElement)
         const toAppend = targetElem.parentElement.parentElement.parentElement
-        toAppend.innerHTML = dragDataElem
+        console.log(toAppend.children[0])
+        toAppend.appendchild(dragDataElem)
             // targetElem.parentElement.remove()
     }, false)
 })
