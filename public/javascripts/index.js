@@ -34,13 +34,12 @@ dragItemElems.forEach(() => {
         console.log(e);
     }, false)
     addEventListener('dragend', (e) => {
+        const curElem = targetElem.parentElement
         e.target.style.opacity = "1"
         e.target.style.color = "black"
-        console.log('event ended');
-        console.log(e);
-        targetElem.parentElement.classList = "container-medium drag"
-        targetElem.parentElement.innerHTML = dragDataElem.innerHTML
-            // dragDataElem.remove()
+        targetElem.parentElement.parentElement.append(dragDataElem)
+        targetElem.parentElement.remove()
+
     }, false)
 })
 
