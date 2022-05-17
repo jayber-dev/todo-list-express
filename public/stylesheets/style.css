@@ -73,6 +73,7 @@ label {
 }
 
 .container-high {
+    background-color: rgba(255, 99, 71, 0.253);
     cursor: grab;
     display: flex;
     width: fit-content;
@@ -80,6 +81,7 @@ label {
 }
 
 .container-medium {
+    background-color: rgba(255, 166, 0, 0.212);
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
@@ -87,6 +89,7 @@ label {
 }
 
 .container-low {
+    background-color: rgba(152, 251, 152, 0.281);
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
@@ -159,6 +162,26 @@ p {
     cursor: pointer;
 }
 
+.drop-box {
+    min-width: 216px;
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: rgba(128, 128, 128, 0.226);
+}
+
+
+/* .drop-box.over {
+    border: 2px dashed #000;
+} */
+
+.dummy-item:hover {
+    background-color: transparent;
+}
+
+.dummy-item.over {
+    border: 2px dashed #000;
+}
+
 @media screen and (max-width: 700px) {
     .global-list {
         flex-direction: column;
@@ -175,13 +198,4 @@ p {
         align-content: center;
         justify-content: center;
     }
-}
-
-.drop-box {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.dummy-item:hover {
-    background-color: transparent;
 }
