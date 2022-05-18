@@ -3,23 +3,45 @@ var coockie = require('cookie-parser')
 const fs = require('fs');
 const { send } = require('process');
 const app = require('../app');
-const data = require("../data.json")
+// const data = require("../data.json")
 const { json } = require('express');
 var router = express.Router();
+const data = require("../data.json")
 
 // TODO: fix to many event treggers
 // TODO: build SQL database
-/* GET home page. */
+
+let dataFile
+    /* GET home page. */
 router.get('/', function(req, res, next) {
-    // console.log(fs)
-    fs.readFile("data.json", 'utf-8', (err, data) => {
+    fs.readFile("data.json", 'utf-8', (err, dataFile) => {
         if (err) {
             console.log('an error reading file')
         }
-        // console.log(data)
+        console.log('file been read')
+        console.log(JSON.parse(dataFile))
+
     })
+
     res.render('index', { title: "Manage your task's", toList: data });
 });
+
+// --------------------- POST FOR PRIORITY CHANGE ----------------------------
+router.post("/priority", (req, res, next) => {
+    console.log('in the priority');
+    data[req.body.id].priority = req.body.priority
+        // console.log(`current data\n ${data[req.body.id].priority}`);
+    fs.writeFile("data.json", JSON.stringify(data, 4), (err) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+        console.log('data updated')
+
+    })
+    console.log(data);
+    res.render('index', { title: "Manage your task's", toList: data });
+})
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 router.post('/handle', (req, res, next) => {
@@ -72,24 +94,7 @@ router.post('/addItem', (req, res, next) => {
 
 })
 
-// --------------------- POST FOR PRIORITY CHANGE ----------------------------
-router.post("/priority", (req, res, next) => {
-    let priorityValue = req.body
-    data[req.body.id].priority = req.body.priority
-        // console.log(`current data\n ${data[req.body.id].priority}`);
-        // console.log(priorityValue);
-    console.log(data);
-    console.log('im in priorty change');
-    fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        console.log('data updated')
 
-    })
-
-})
 
 
 module.exports = router;

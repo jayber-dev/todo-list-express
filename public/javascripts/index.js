@@ -37,7 +37,8 @@ dragItemElems.forEach(() => {
     // handling all the changes for the dragend + ajax call handler for priority changes 
 
     addEventListener('dragend', (e) => {
-        const curElem = targetElem.parentElement
+        e.stopImmediatePropagation()
+            // const curElem = targetElem.parentElement
 
         e.target.style.opacity = "1"
         e.target.style.color = "black"
@@ -63,14 +64,14 @@ dragItemElems.forEach(() => {
             req.send(body = `priority=1&id=${e.target.children[1].id}`)
 
         }
-        // setTimeout(() => {
-        //     document.location.reload()
-        // }, 1000)
-    }, { once: false })
+
+    }, true)
 })
 
 dropContainerElem.forEach(() => {
     addEventListener('dragover', (e) => {
+        e.stopImmediatePropagation()
+        console.log(e);
         e.dataTransfer.dropEffect = 'move';
         e.preventDefault();
         if (e.target.className == "container-low drop-box" || e.target.className == "todo-item dummy-item") {
