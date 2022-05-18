@@ -8,7 +8,8 @@ const { json } = require('express');
 var router = express.Router();
 const data = require("../data.json")
 
-// TODO: fix to many event treggers
+
+// TODO: check sqlite at work for progress
 // TODO: build SQL database
 
 let dataFile

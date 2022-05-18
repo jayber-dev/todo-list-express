@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/pics', express.static('public'))
 
 
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/page', pageRouter)
