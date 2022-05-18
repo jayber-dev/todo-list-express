@@ -45,22 +45,28 @@ dragItemElems.forEach(() => {
         const toAppend = targetElem.parentElement.parentElement.parentElement
         toAppend.children[1].append(dragDataElem)
 
-        console.log(e.target.parentElement.classList);
+        console.log(e.target.children[1].id);
         const req = new XMLHttpRequest()
         req.open("post", "priority", true)
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         if (e.target.parentElement.classList == 'color-low') {
             console.log('low priority');
-            req.send(body = `priority=3`)
+            req.send(body = `priority=3&id=${e.target.children[1].id}`)
+
+
         } else if (e.target.parentElement.classList == 'color-med') {
             console.log('med priority');
-            req.send(body = `priority='3'`)
-        } else if (e.target.parentElement.classList == 'color-med') {
-            console.log('high priority');
-            req.send(body = `priority=3`)
-        }
+            req.send(body = `priority='2'&id=${e.target.children[1].id}`)
 
-    }, false)
+        } else if (e.target.parentElement.classList == 'color-high') {
+            console.log('high priority');
+            req.send(body = `priority=1&id=${e.target.children[1].id}`)
+
+        }
+        // setTimeout(() => {
+        //     document.location.reload()
+        // }, 1000)
+    }, { once: false })
 })
 
 dropContainerElem.forEach(() => {

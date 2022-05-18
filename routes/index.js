@@ -7,7 +7,8 @@ const data = require("../data.json")
 const { json } = require('express');
 var router = express.Router();
 
-
+// TODO: fix to many event treggers
+// TODO: build SQL database
 /* GET home page. */
 router.get('/', function(req, res, next) {
     // console.log(fs)
@@ -15,7 +16,7 @@ router.get('/', function(req, res, next) {
         if (err) {
             console.log('an error reading file')
         }
-        console.log(data)
+        // console.log(data)
     })
     res.render('index', { title: "Manage your task's", toList: data });
 });
@@ -74,9 +75,19 @@ router.post('/addItem', (req, res, next) => {
 // --------------------- POST FOR PRIORITY CHANGE ----------------------------
 router.post("/priority", (req, res, next) => {
     let priorityValue = req.body
-
-    console.log(priorityValue);
+    data[req.body.id].priority = req.body.priority
+        // console.log(`current data\n ${data[req.body.id].priority}`);
+        // console.log(priorityValue);
+    console.log(data);
     console.log('im in priorty change');
+    fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+        console.log('data updated')
+
+    })
 
 })
 
