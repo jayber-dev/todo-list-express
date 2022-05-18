@@ -21,6 +21,7 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
     }
 })
 
+// ------------------ DRAG AND DROP HANDLER ----------------------------------
 const dragItemElems = document.querySelectorAll('.drag');
 const dropContainerElem = document.querySelectorAll('.drop-box')
 let dragDataElem
@@ -29,28 +30,44 @@ let targetElem
 dragItemElems.forEach(() => {
     addEventListener('dragstart', (e) => {
         e.dataTransfer.dropEffect = 'move';
-        e.target.style.opacity = "0.3";
+        // e.target.style.opacity = "0.3";
         dragDataElem = e.target
-        console.log(e);
     }, false)
+
+    // handling all the changes for the dragend + ajax call handler for priority changes 
+
     addEventListener('dragend', (e) => {
         const curElem = targetElem.parentElement
+
         e.target.style.opacity = "1"
         e.target.style.color = "black"
-            // console.log(targetElem.parentElement.parentElement.parentElement)
+        targetElem.classList.remove('over')
         const toAppend = targetElem.parentElement.parentElement.parentElement
-        console.log(toAppend.children[0])
-        toAppend.appendchild(dragDataElem)
-            // targetElem.parentElement.remove()
+        toAppend.children[1].append(dragDataElem)
+
+        console.log(e.target.parentElement.classList);
+        const req = new XMLHttpRequest()
+        req.open("post", "priority", true)
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        if (e.target.parentElement.classList == 'color-low') {
+            console.log('low priority');
+            req.send(body = `priority=3`)
+        } else if (e.target.parentElement.classList == 'color-med') {
+            console.log('med priority');
+            req.send(body = `priority='3'`)
+        } else if (e.target.parentElement.classList == 'color-med') {
+            console.log('high priority');
+            req.send(body = `priority=3`)
+        }
+
     }, false)
 })
 
 dropContainerElem.forEach(() => {
     addEventListener('dragover', (e) => {
         e.dataTransfer.dropEffect = 'move';
-        e.preventDefault(); // Necessary. Allows us to drop.
+        e.preventDefault();
         if (e.target.className == "container-low drop-box" || e.target.className == "todo-item dummy-item") {
-            console.log(e)
             e.target.classList.add('over')
             targetElem = e.target
         }
@@ -60,10 +77,3 @@ dropContainerElem.forEach(() => {
         targetElem = null
     })
 })
-
-// dragItemElems.forEach(() => {
-
-
-//     })
-// })
-console.log(dragItemElems)

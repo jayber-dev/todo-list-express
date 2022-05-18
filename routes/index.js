@@ -71,5 +71,14 @@ router.post('/addItem', (req, res, next) => {
 
 })
 
+// --------------------- POST FOR PRIORITY CHANGE ----------------------------
+router.post("/priority", (req, res, next) => {
+    let priorityValue = req.body
+
+    console.log(priorityValue);
+    console.log('im in priorty change');
+
+})
+
 
 module.exports = router;

@@ -17,11 +17,12 @@ block content
   div(class="global-list")
     div(class="cont-high")
       p(class="urgent-high") high
-      each val in toList
-        if (val["priority"] == 1)
-          div(class="container-high drag" draggable="true")
-            p(class="todo-item")= val['todo'] 
-            p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+      div(class="color-high")
+        each val in toList
+          if (val["priority"] == 1)
+            div(class="container-high drag" draggable="true")
+              p(class="todo-item")= val['todo'] 
+              p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
               p(class="todo-item dummy-item") Drag item here
@@ -29,11 +30,12 @@ block content
 
     div(class="cont-med")
       p(class="urgent-medium") medium
-      each val in toList
-        if (val['priority'] == 2)
-          div(class='container-medium drag' draggable="true")
-            p(class="todo-item")= val['todo'] 
-            p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+      div(class="color-med")
+        each val in toList
+          if (val['priority'] == 2)
+            div(class='container-medium drag' draggable="true")
+              p(class="todo-item")= val['todo'] 
+              p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
               p(class="todo-item dummy-item") Drag item here
@@ -41,7 +43,7 @@ block content
 
     div(class="cont-low")
       p(class="urgent-low") low
-      div
+      div(class="color-low")
         each val in toList
           if (val['priority'] == 3)
             div(class='container-low drag' draggable="true")

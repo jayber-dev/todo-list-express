@@ -73,27 +73,36 @@ label {
 }
 
 .container-high {
-    background-color: rgba(255, 99, 71, 0.253);
     cursor: grab;
     display: flex;
     width: fit-content;
     border-bottom: 1px solid;
+}
+
+.color-high {
+    background-color: rgba(255, 99, 71, 0.253);
 }
 
 .container-medium {
-    background-color: rgba(255, 166, 0, 0.212);
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
     cursor: grab;
 }
 
+.color-med {
+    background-color: rgba(255, 166, 0, 0.212);
+}
+
 .container-low {
-    background-color: rgba(152, 251, 152, 0.281);
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
     cursor: grab;
+}
+
+.color-low {
+    background-color: rgba(152, 251, 152, 0.281);
 }
 
 .urgent-high {
