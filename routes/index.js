@@ -7,6 +7,18 @@ const app = require('../app');
 const { json } = require('express');
 var router = express.Router();
 const data = require("../data.json")
+const sqlite3 = require('sqlite3').verbose()
+const db = new sqlite3.Database('todo.db')
+
+
+// db.serialize(() => {
+
+//     const stmt = db.prepare(`DELETE FROM lorem`)
+//     stmt.run()
+//     stmt.finalize()
+
+// })
+
 
 
 // TODO: check sqlite at work for progress
@@ -29,19 +41,19 @@ router.get('/', function(req, res, next) {
 
 // --------------------- POST FOR PRIORITY CHANGE ----------------------------
 router.post("/priority", (req, res, next) => {
-    console.log('in the priority');
-    data[req.body.id].priority = req.body.priority
-        // console.log(`current data\n ${data[req.body.id].priority}`);
-    fs.writeFile("data.json", JSON.stringify(data, 4), (err) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        console.log('data updated')
+    // console.log('in the priority');
+    // data[req.body.id].priority = req.body.priority
+    //     // console.log(`current data\n ${data[req.body.id].priority}`);
+    // fs.writeFile("data.json", JSON.stringify(data, 4), (err) => {
+    //     if (err) {
+    //         console.log(err)
+    //         return
+    //     }
+    //     console.log('data updated')
 
-    })
-    console.log(data);
-    res.render('index', { title: "Manage your task's", toList: data });
+    // })
+    // console.log(data);
+    // res.render('index', { title: "Manage your task's", toList: data });
 })
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
@@ -70,6 +82,13 @@ router.post('/handle', (req, res, next) => {
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
 router.post('/addItem', (req, res, next) => {
     let itemId
+    db.serialize(() => {
+
+        const stmt = db.prepare(`INSERT INTO lorem VALUES(?)`)
+        stmt.run(req.body.content)
+        stmt.finalize()
+
+    })
     console.log("im inside the additem")
     if (data.length == 0) {
         itemId = 0
