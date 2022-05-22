@@ -1,0 +1,75 @@
+body {
+    background-image: url(/static/backgroundImage/tree-3095703_1920.jpg);
+    background-size: auto;
+    background-repeat: space;
+    margin: 0;
+    background-color: rgb(2, 8, 37);
+}
+
+img {
+    height: 50px;
+}
+
+.flash_messages {
+    color: black;
+    font-size: medium;
+}
+
+input {
+    background-color: transparent;
+    border-bottom: 1px solid #595959 !important;
+}
+
+.sizing {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-register {
+    border: 1px solid #595959;
+    border-radius: 10px;
+}
+
+.country-box {
+    text-align: center !important;
+    background-color: transparent;
+    border: 0px;
+}
+
+.small-tag {
+    font-size: 11px;
+    color: darkred;
+}
+
+.login-form {
+    background-color: white;
+    box-shadow: 0 0 8px 1px rgb(243, 188, 116);
+    color: black(206, 22, 22);
+    padding-top: 60px;
+    text-align: center;
+    min-width: 280px;
+    max-width: 500px;
+    min-height: 500px;
+    border-radius: 5px;
+    border: 1px solid rgb(128, 128, 128, 0.2);
+    z-index: 0;
+}
+
+.back-login {
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.register-form {
+    background-color: white;
+    box-shadow: 0 0 10px 1px rgb(243, 188, 116);
+    display: none;
+    color: black(206, 22, 22);
+    text-align: center;
+    min-width: 280px;
+    min-height: 500px;
+    padding-top: 60px;
+    border-radius: 5px;
+    border: 1px solid rgb(128, 128, 128, 0.2);
+}
