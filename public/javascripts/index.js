@@ -41,7 +41,6 @@ dragItemElems.forEach(() => {
             // const curElem = targetElem.parentElement
 
         e.target.style.opacity = "1"
-        e.target.style.color = "black"
         targetElem.classList.remove('over')
         const toAppend = targetElem.parentElement.parentElement.parentElement
         toAppend.children[1].append(dragDataElem)

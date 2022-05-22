@@ -1,11 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&family=Bebas+Neue&family=Send+Flowers&display=swap');
+:root {
+    --main-color: rgb(211, 204, 165);
+    --item-text-color: #ffffff;
+}
+
 
 /* font-family: 'Akshar', sans-serif; 
 /* font-family: 'Bebas Neue', cursive; 
 /* font-family: 'Send Flowers', cursive; */
 
 body {
-    background-image: url('../pics/watercolor-4117017.png');
+    background-image: url('../pics/black-1072366_1920.jpg');
     background-size: cover;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -26,19 +31,26 @@ body {
 }
 
 .logo {
-    height: 20px;
+    height: 30px;
+    padding-right: 5px;
 }
 
 a {
-    color: #00B7FF;
+    font-size: larger;
+    color: var(--main-color);
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 25px;
 }
 
 h1,
 h3 {
+    color: var(--main-color);
     text-align: center;
 }
 
 input {
+    color: var(--item-text-color);
     background-color: transparent;
     border: 0;
     border-bottom: 2px solid;
@@ -46,6 +58,7 @@ input {
 }
 
 .input-container {
+    color: var(--main-color);
     transform: skewX(-10deg);
     align-items: center;
     display: flex;
@@ -73,6 +86,7 @@ label {
 }
 
 .container-high {
+    align-items: center;
     cursor: grab;
     display: flex;
     width: fit-content;
@@ -80,10 +94,12 @@ label {
 }
 
 .color-high {
+    color: var(--item-text-color);
     background-color: rgba(255, 99, 71, 0.253);
 }
 
 .container-medium {
+    align-items: center;
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
@@ -91,10 +107,12 @@ label {
 }
 
 .color-med {
+    color: var(--item-text-color);
     background-color: rgba(255, 166, 0, 0.212);
 }
 
 .container-low {
+    align-items: center;
     display: flex;
     border-bottom: 1px solid;
     width: fit-content;
@@ -102,6 +120,7 @@ label {
 }
 
 .color-low {
+    color: var(--item-text-color);
     background-color: rgba(152, 251, 152, 0.281);
 }
 
@@ -153,9 +172,9 @@ label {
 }
 
 .todo-item {
+    color: var(--item-text-color);
     font-size: 20px;
     font-family: 'Akshar', sans-serif;
-    ;
     width: 200px;
 }
 
@@ -198,8 +217,25 @@ p {
         align-content: center;
     }
     .container-high {
+        width: auto;
+        justify-content: center;
+        cursor: grab;
         display: flex;
-        align-content: flex-end;
+        border-bottom: 1px solid;
+    }
+    .container-medium {
+        width: auto;
+        justify-content: center;
+        cursor: grab;
+        display: flex;
+        border-bottom: 1px solid;
+    }
+    .container-low {
+        width: auto;
+        justify-content: center;
+        cursor: grab;
+        display: flex;
+        border-bottom: 1px solid;
     }
     .urgent-high {
         display: flex;
