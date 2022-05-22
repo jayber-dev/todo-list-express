@@ -21,7 +21,7 @@ block content
         each val in toList
           if (val["priority"] == 1)
             div(class="container-high drag" draggable="true")
-              p(class="todo-item")= val['todo'] 
+              p(class="todo-item")= val['task'] 
               p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
@@ -34,7 +34,7 @@ block content
         each val in toList
           if (val['priority'] == 2)
             div(class='container-medium drag' draggable="true")
-              p(class="todo-item")= val['todo'] 
+              p(class="todo-item")= val['task'] 
               p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
@@ -47,7 +47,7 @@ block content
         each val in toList
           if (val['priority'] == 3)
             div(class='container-low drag' draggable="true")
-              p(class="todo-item")= val['todo'] 
+              p(class="todo-item")= val['task'] 
               p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
       div
         div(class=' drop-box')

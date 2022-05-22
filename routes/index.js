@@ -6,7 +6,6 @@ const app = require('../app');
 // const data = require("../data.json")
 const { json } = require('express');
 var router = express.Router();
-const data = require("../data.json")
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 
@@ -24,94 +23,43 @@ const db = new sqlite3.Database('todo.db')
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
-let dataFile
+let datasql
     /* GET home page. */
 router.get('/', function(req, res, next) {
-    fs.readFile("data.json", 'utf-8', (err, dataFile) => {
+    const sql = db.all('SELECT * FROM todo', (err, rows) => {
         if (err) {
-            console.log('an error reading file')
+            throw err
         }
-        console.log('file been read')
-        console.log(JSON.parse(dataFile))
 
-    })
+        res.render('index', { title: "Manage your task's", toList: rows });
+    });
+})
 
-    res.render('index', { title: "Manage your task's", toList: data });
-});
+// console.log(datasql)
+
+
 
 // --------------------- POST FOR PRIORITY CHANGE ----------------------------
 router.post("/priority", (req, res, next) => {
-    // console.log('in the priority');
-    // data[req.body.id].priority = req.body.priority
-    //     // console.log(`current data\n ${data[req.body.id].priority}`);
-    // fs.writeFile("data.json", JSON.stringify(data, 4), (err) => {
-    //     if (err) {
-    //         console.log(err)
-    //         return
-    //     }
-    //     console.log('data updated')
-
-    // })
-    // console.log(data);
-    // res.render('index', { title: "Manage your task's", toList: data });
+    db.run(`UPDATE todo
+            SET priority = ? WHERE id = ?`, req.body.priority, req.body.id)
+        // res.render('index', { title: "Manage your task's", toList: data });
 })
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 router.post('/handle', (req, res, next) => {
-    let bodyData = req.body;
-    console.log('im in the post method')
-    let toRemove = Number(bodyData.itemId)
-    console.log(toRemove)
-    console.log(typeof toRemove)
-    console.log(`toremove: ${toRemove}`)
-    data.splice(toRemove, 1)
-    for (let i = 0; i < data.length; i++) {
-        data[i].id = i
-    }
-    fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        console.log('wrote new data')
-    })
-    console.log(data)
-    res.render('index', { title: 'Express', toList: data });
+    db.run(`DELETE FROM todo WHERE id = ?`, req.body.itemId)
 })
 
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
 router.post('/addItem', (req, res, next) => {
     let itemId
-    db.serialize(() => {
-
-        const stmt = db.prepare(`INSERT INTO lorem VALUES(?)`)
-        stmt.run(req.body.content)
-        stmt.finalize()
-
-    })
     console.log("im inside the additem")
-    if (data.length == 0) {
-        itemId = 0
-    } else {
-        itemId = data.length
-    }
-    console.log(req.body)
-    let dataToAppend = {
-        "id": itemId,
-        "priority": req.body.priority,
-        "todo": req.body.content
-    }
-    data.push(dataToAppend);
-    console.log(data)
-    fs.writeFile("data.json", JSON.stringify(data, indent = 4), (err) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        console.log('data updated')
-
+    db.serialize(() => {
+        const stmt = db.prepare(`INSERT INTO todo (task, priority) VALUES('${req.body.content}',1)`)
+        stmt.run()
+        stmt.finalize()
     })
-
 })
 
 
