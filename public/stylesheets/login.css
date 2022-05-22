@@ -1,9 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&family=Bebas+Neue&family=Send+Flowers&display=swap');
+:root {
+    --main-color: rgb(211, 204, 165);
+    --item-text-color: #ffffff;
+}
+
 body {
-    background-image: url(/static/backgroundImage/tree-3095703_1920.jpg);
-    background-size: auto;
-    background-repeat: space;
-    margin: 0;
-    background-color: rgb(2, 8, 37);
+    min-height: 100vh;
+    background-image: url('../pics/black-1072366_1920.jpg');
+    background-size: cover;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font-family: 'Akshar', sans-serif;
+    /* background-color: rgb(2, 8, 37); */
+}
+
+.back-main {
+    font-size: larger;
+    color: var(--main-color);
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 25px;
 }
 
 img {
@@ -17,7 +33,7 @@ img {
 
 input {
     background-color: transparent;
-    border-bottom: 1px solid #595959 !important;
+    border-bottom: 1px solid #ffffff !important;
 }
 
 .sizing {
@@ -26,9 +42,19 @@ input {
     margin-right: auto;
 }
 
-.btn-register {
-    border: 1px solid #595959;
-    border-radius: 10px;
+.buttuns {
+    display: flex;
+    height: 40px;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.reg-btn {
+    height: 40px;
+    border: 1px solid;
+    border-radius: 25px;
 }
 
 .country-box {
@@ -38,13 +64,14 @@ input {
 }
 
 .small-tag {
-    font-size: 11px;
-    color: darkred;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    font-weight: 100;
 }
 
 .login-form {
-    background-color: white;
-    box-shadow: 0 0 8px 1px rgb(243, 188, 116);
+    background-color: rgb(50, 50, 50);
+    box-shadow: 0 0 8px 1px rgb(0, 0, 0);
     color: black(206, 22, 22);
     padding-top: 60px;
     text-align: center;
@@ -62,8 +89,8 @@ input {
 }
 
 .register-form {
-    background-color: white;
-    box-shadow: 0 0 10px 1px rgb(243, 188, 116);
+    background-color: rgb(34, 34, 34);
+    box-shadow: 0 0 10px 1px rgb(3, 3, 3);
     display: none;
     color: black(206, 22, 22);
     text-align: center;

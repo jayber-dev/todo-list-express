@@ -9,29 +9,22 @@ var router = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 
-
-// db.serialize(() => {
-
-//     const stmt = db.prepare(`DELETE FROM lorem`)
-//     stmt.run()
-//     stmt.finalize()
-
-// })
-
-
-
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
-let datasql
-    /* GET home page. */
+/* GET home page. */
 router.get('/', function(req, res, next) {
     const sql = db.all('SELECT * FROM todo', (err, rows) => {
         if (err) {
             throw err
         }
 
-        res.render('index', { title: "Manage your task's", toList: rows });
+        res.render('index', {
+            title: "Manage your task's",
+            toList: rows,
+            csslink: '../stylesheets/style.css',
+            jslink: '/javascripts/index.js'
+        });
     });
 })
 
@@ -49,6 +42,7 @@ router.post("/priority", (req, res, next) => {
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 router.post('/handle', (req, res, next) => {
     db.run(`DELETE FROM todo WHERE id = ?`, req.body.itemId)
+
 })
 
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------

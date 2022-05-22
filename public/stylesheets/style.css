@@ -20,10 +20,6 @@ body {
     /* font-family: 'Send Flowers', cursive; */
 }
 
-.header {
-    transform: skewX(-10deg);
-}
-
 .header>div {
     display: flex;
     align-items: center;
