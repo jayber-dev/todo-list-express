@@ -12,8 +12,6 @@ const db = new sqlite3.Database('todo.db')
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
-// db.run(`INSERT INTO users (fname,lname,email,country,hash_password) VALUES('jay','ber','jayber1@gmail.com','Israel','Pp304682685!');`)
-
 //     /* GET home page. */
 router.get('/', function(req, res, next) {
     const sql = db.all('SELECT * FROM todo', (err, rows) => {
