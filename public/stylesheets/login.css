@@ -19,6 +19,7 @@ h1 {
 }
 
 .logo-img {
+    height: 20px;
     margin-left: 5px;
     background-color: var(--item-text-color);
     border-radius: 5px;
@@ -102,6 +103,23 @@ input {
     border-radius: 5px;
     border: 1px solid rgb(128, 128, 128, 0.2);
     z-index: 0;
+}
+
+#side-login {
+    border-radius: 5px;
+    box-shadow: 0 0 8px 1px rgb(0, 0, 0);
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url(../pics/back-only-one-png.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-attachment: local;
+    image-rendering: auto;
+    min-width: 280px;
+    min-height: 160px;
+    height: 100px;
 }
 
 .back-login {
