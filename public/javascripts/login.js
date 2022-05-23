@@ -26,6 +26,7 @@ passIn.addEventListener('keyup', (e) => {
             passTag.innerHTML = "";
         } else {
             passTag.innerHTML = " ** Too short minimum 8 charecters **";
+            passTag.style.color = "white"
             passVar.setAttribute('disabled', 'true')
         }
     }
@@ -37,7 +38,13 @@ passVar.addEventListener('keyup', (e) => {
     if (passIn.value === passVar.value) {
         btnReg.removeAttribute('disabled')
         passVarTag.innerHTML = ""
+        document.getElementById('regBtnP').innerHTML = ""
     } else {
         passVarTag.innerHTML = "Password does not match"
+        document.getElementById('regBtnP').innerHTML = "Please fill in all the fields"
     }
 })
+
+if (btnReg.attributes.disabled.name == 'disabled') {
+    document.getElementById('regBtnP').innerHTML = "Please fill in all the fields"
+}

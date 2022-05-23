@@ -9,10 +9,7 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.post('enter', function(req, res, next) {
-    console.log(req.body);
-    res.redirect('/')
-})
+
 
 
 module.exports = router;

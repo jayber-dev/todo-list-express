@@ -12,13 +12,13 @@ const db = new sqlite3.Database('todo.db')
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
-/* GET home page. */
+
+//     /* GET home page. */
 router.get('/', function(req, res, next) {
     const sql = db.all('SELECT * FROM todo', (err, rows) => {
         if (err) {
             throw err
         }
-
         res.render('index', {
             title: "Manage your task's",
             toList: rows,
@@ -69,6 +69,7 @@ router.post('/enter', function(req, res, next) {
 
 router.post('/register', function(req, res, next) {
     console.log('im in register func');
+    console.log(req.body);
 })
 
 

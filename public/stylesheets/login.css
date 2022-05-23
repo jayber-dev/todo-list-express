@@ -132,6 +132,8 @@ input {
 }
 
 #btn-register {
+    height: 40px;
+    width: 90px;
     margin: 0 auto;
     font-size: large;
     border-bottom: 1px solid white;
@@ -140,6 +142,16 @@ input {
     border-right: none;
     color: var(--item-text-color);
     text-align: center;
+}
+
+#regBtnP {
+    font-size: x-small;
+    color: var(--item-text-color);
+}
+
+#btn-register:hover {
+    background-color: rgb(252, 250, 250, 0.8);
+    color: black;
 }
 
 @media screen and (max-width: 700px) {
