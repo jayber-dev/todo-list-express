@@ -105,23 +105,6 @@ input {
     z-index: 0;
 }
 
-#side-login {
-    border-radius: 5px;
-    box-shadow: 0 0 8px 1px rgb(0, 0, 0);
-    position: absolute;
-    top: 13%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-image: url(../pics/back-only-one-png.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-attachment: local;
-    image-rendering: auto;
-    min-width: 280px;
-    min-height: 160px;
-    height: 100px;
-}
-
 .back-login {
     margin-left: 20px;
     text-decoration: none;

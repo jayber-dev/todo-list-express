@@ -1,10 +1,11 @@
-var express = require('express');
-var coockie = require('cookie-parser')
+const express = require('express');
+const coockie = require('cookie-parser')
 const { send } = require('process');
 const app = require('../app');
-// const data = require("../data.json")
+const session = require('express-session')
+    // const data = require("../data.json")
 const { json } = require('express');
-var router = express.Router();
+const router = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 
@@ -18,7 +19,7 @@ router.get('/', function(req, res, next) {
             throw err
         }
         res.render('index', {
-            title: "Manage your task's",
+            title: "Manage your tasks",
             toList: rows,
             csslink: '../stylesheets/style.css',
             jslink: '/javascripts/index.js'
