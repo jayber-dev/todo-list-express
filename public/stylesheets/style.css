@@ -189,6 +189,7 @@ p {
 
 .del-item {
     cursor: pointer;
+    font-size: large;
 }
 
 .drop-box {

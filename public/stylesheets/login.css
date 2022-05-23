@@ -110,6 +110,7 @@ input {
 }
 
 .register-form {
+    font-size: larger;
     background-color: rgb(34, 34, 34, 0.9);
     box-shadow: 0 0 10px 1px rgb(3, 3, 3);
     display: none;
@@ -123,7 +124,7 @@ input {
 }
 
 .section-height {
-    min-height: 300px;
+    min-height: 290px;
 }
 
 .space {
@@ -142,6 +143,17 @@ input {
     border-right: none;
     color: var(--item-text-color);
     text-align: center;
+    cursor: pointer;
+}
+
+#regBtnP {
+    font-size: x-small;
+    color: var(--item-text-color);
+}
+
+#btn-register:hover {
+    background-color: rgb(252, 250, 250, 0.8);
+    color: black;
 }
 
 #regBtnP {

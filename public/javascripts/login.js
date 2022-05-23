@@ -40,6 +40,7 @@ passVar.addEventListener('keyup', (e) => {
         passVarTag.innerHTML = ""
         document.getElementById('regBtnP').innerHTML = ""
     } else {
+
         passVarTag.innerHTML = "Password does not match"
         document.getElementById('regBtnP').innerHTML = "Please fill in all the fields"
     }
