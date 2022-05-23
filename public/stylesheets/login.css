@@ -6,7 +6,7 @@
 
 body {
     min-height: 100vh;
-    background-image: url('../pics/back-only-one-jpg.jpg');
+    background-image: url('../pics/png-background.png');
     background-size: cover;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -129,4 +129,22 @@ input {
 .space {
     /* margin-top: 25px !important; */
     margin-bottom: 25px !important;
+}
+
+#btn-register {
+    margin: 0 auto;
+    font-size: large;
+    border-bottom: 1px solid white;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    color: var(--item-text-color);
+    text-align: center;
+}
+
+@media screen and (max-width: 700px) {
+    body {
+        background-image: url('../pics/back-new-png.png');
+        background-size: cover;
+    }
 }

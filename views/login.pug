@@ -7,7 +7,7 @@ block content
   
   div(class="w3-mobile")
     div(class="w3-animate-opacity" id="login-form")
-      form(class="w3-display-middle login-form" action="/" method="POST")
+      form(class="w3-display-middle login-form" action="/enter" method="POST")
         h1 Login
         img(src="../pics/todo-icon.jpg" alt="logo" class="logo-img")
         div(class="w3-margin")
@@ -25,7 +25,7 @@ block content
     div(class="register-form w3-display-middle w3-animate-opacity " id="form-modal")
       p(class="w3-display-topleft ")
         a(href="/login" class="back-login")
-      form(class="" action="/" method="POST")
+      form(class="" action="/register" method="POST")
         h1 Register
           img(src="../pics/todo-icon.jpg" alt="logo" class="logo-img")
         div(class="w3-half section-height")
@@ -300,8 +300,8 @@ block content
             div(class="w3-margin")
                 label Varify password
                 input(type="password" class="w3-input sizing" id="password-varify" name="pass_varify" disabled)
-          div(class="w3-margin")
-              input(id="btn-register" type="submit" class="btn" value="Register" disabled)
+        div(class="w3-margin")
+          input(id="btn-register" type="submit" class="btn" value="Register" disabled)
                   
 
 

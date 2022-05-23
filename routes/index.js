@@ -57,6 +57,20 @@ router.post('/addItem', (req, res, next) => {
 })
 
 
+// ------------------------- REGISTER AND LOGIN HANDLING ----------------------------------
+
+router.post('/enter', function(req, res, next) {
+    if (req.method == 'POST') {
+        console.log(req.body);
+        res.redirect('/')
+    }
+
+})
+
+router.post('/register', function(req, res, next) {
+    console.log('im in register func');
+})
+
 
 
 module.exports = router;
