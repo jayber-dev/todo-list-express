@@ -9,7 +9,7 @@ block content
     div(class="w3-animate-opacity" id="login-form")
       form(class="w3-display-middle login-form" action="/" method="POST")
         h1 Login
-        img(src="../pics/todo-icon.jpg" alt="logo")
+        img(src="../pics/todo-icon.jpg" alt="logo" class="logo-img")
         div(class="w3-margin")
           label(for="Email") Email address
           input(type="email" class="w3-input sizing" id="Email" aria-describedby="emailHelp" name="email")
@@ -19,7 +19,7 @@ block content
           input(type="password" class="w3-input sizing" id="exampleInputPassword1" name="pass")
         div(class="buttuns")
           input(type="submit" class="w3-button btn btn-register" value="Login")
-          a(href="#" class=" w3-button btn btn-register" onclick="registerBlock()") register
+          a(href="#" class=" w3-button btn btn-register reg-btn" onclick="registerBlock()") register
           
   div
     div(class="register-form w3-display-middle w3-animate-opacity " id="form-modal")
@@ -27,22 +27,22 @@ block content
         a(href="/login" class="back-login")
       form(class="" action="/" method="POST")
         h1 register
-          img(src="../pics/todo-icon.jpg" alt="logo")
-        div(class="w3-half section-width")
-          div(class="w3-margin")
+          img(src="../pics/todo-icon.jpg" alt="logo" class="logo-img")
+        div(class="w3-half section-height")
+          div(class="w3-margin space")
             label(for="Email" first) Name
               small *
             input(type="text" class="w3-input sizing" id="name" aria-describedby="emailHelp" name="fname" required)
-          div(class="w3-margin")
+          div(class="w3-margin space")
             label(for="lname") Last name
               small *
             input(type="text" class="w3-input sizing" id="name" aria-describedby="emailHelp" name="lname")
-          div(class="w3-margin")
+          div(class="w3-margin space")
             label(for="Email") Email address 
               small *
             input(type="email" class="w3-input sizing" id="Email" aria-describedby="emailHelp" name="email" required)
             small(id="emailHelp" class="small-tag") *We'll never share your email with anyone else.
-        div(class="w3-half w3-rest section-width")
+        div(class="w3-half w3-rest section-height")
           div(class="w3-margin")
             label(for="") country 
             select(class="w3-input country-box sizing " id="country" name="country")
@@ -292,12 +292,12 @@ block content
                 <option value="Zaire">Zaire</option>
                 <option value="Zambia">Zambia</option>
                 <option value="Zimbabwe">Zimbabwe</option>
-              div(class="w3-margin")
-                label(class="" for="password") Choose Password
-                input(type="password" class="w3-input sizing" id="password" name="pass")
+            div(class="w3-margin")
+                label(for="pass") password 
+                input(type="password" class="w3-input sizing" id="password" name="pass" value="")
                 small(class="small-tag") *Password must contain one special charecter one uppercase,lowercase and one number
                 small(id="pass-tag")
-              div(class="w3-margin")
+            div(class="w3-margin")
                 label Varify password
                 input(type="password" class="w3-input sizing" id="password-varify" name="pass_varify" disabled)
             div(class="w3-margin")

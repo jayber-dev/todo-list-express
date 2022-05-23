@@ -6,12 +6,21 @@
 
 body {
     min-height: 100vh;
-    background-image: url('../pics/black-1072366_1920.jpg');
+    background-image: url('../pics/png-background.png');
     background-size: cover;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     font-family: 'Akshar', sans-serif;
     /* background-color: rgb(2, 8, 37); */
+}
+
+h1 {
+    color: var(--item-text-color)
+}
+
+.logo-img {
+    background-color: var(--item-text-color);
+    border-radius: 25px;
 }
 
 .back-main {
@@ -31,6 +40,10 @@ img {
     font-size: medium;
 }
 
+label {
+    color: honeydew;
+}
+
 input {
     background-color: transparent;
     border-bottom: 1px solid #ffffff !important;
@@ -43,6 +56,8 @@ input {
 }
 
 .buttuns {
+    font-size: larger;
+    color: honeydew;
     display: flex;
     height: 40px;
     justify-content: space-around;
@@ -54,12 +69,17 @@ input {
 .reg-btn {
     height: 40px;
     border: 1px solid;
-    border-radius: 25px;
+    /* border-radius: 25px; */
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid white;
 }
 
 .country-box {
+    background-color: rgb(50, 50, 50);
+    color: var(--item-text-color);
     text-align: center !important;
-    background-color: transparent;
     border: 0px;
 }
 
@@ -72,7 +92,7 @@ input {
 .login-form {
     background-color: rgb(50, 50, 50);
     box-shadow: 0 0 8px 1px rgb(0, 0, 0);
-    color: black(206, 22, 22);
+    color: white;
     padding-top: 60px;
     text-align: center;
     min-width: 280px;
@@ -99,4 +119,13 @@ input {
     padding-top: 60px;
     border-radius: 5px;
     border: 1px solid rgb(128, 128, 128, 0.2);
+}
+
+.section-height {
+    min-height: 300px;
+}
+
+.space {
+    /* margin-top: 25px !important; */
+    margin-bottom: 25px !important;
 }
