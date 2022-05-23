@@ -6,7 +6,7 @@
 
 body {
     min-height: 100vh;
-    background-image: url('../pics/png-background.png');
+    background-image: url('../pics/back-only-one-jpg.jpg');
     background-size: cover;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -19,8 +19,9 @@ h1 {
 }
 
 .logo-img {
+    margin-left: 5px;
     background-color: var(--item-text-color);
-    border-radius: 25px;
+    border-radius: 5px;
 }
 
 .back-main {
@@ -90,7 +91,7 @@ input {
 }
 
 .login-form {
-    background-color: rgb(50, 50, 50);
+    background-color: rgb(50, 50, 50, 0.9);
     box-shadow: 0 0 8px 1px rgb(0, 0, 0);
     color: white;
     padding-top: 60px;
@@ -109,7 +110,7 @@ input {
 }
 
 .register-form {
-    background-color: rgb(34, 34, 34);
+    background-color: rgb(34, 34, 34, 0.9);
     box-shadow: 0 0 10px 1px rgb(3, 3, 3);
     display: none;
     color: black(206, 22, 22);

@@ -28,8 +28,10 @@ body {
 }
 
 .logo {
+    background-color: var(--item-text-color);
+    border-radius: 5px;
     height: 30px;
-    padding-right: 5px;
+    margin-right: 5px;
 }
 
 a {
