@@ -5,7 +5,7 @@ const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 const lala = require('../routes/index')
 
-console.log(lala.connect('/tasks'))
+console.log(lala.length)
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,19 +21,21 @@ router.get('/', function(req, res, next) {
 
 router.post('/enter', function(req, res, next) {
     console.log("inside the enter function");
-    const data = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], (err, data) => {
-        if (err) { throw err }
-        if (req.body.pass == data.hash_password) {
+    try {
+        const data = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], (err, data) => {
+            if (err) { throw err }
+            if (req.body.pass == data.hash_password) {
 
-            console.log(data);
-            res.redirect('/tasks')
-        } else {
-            console.log("pass not match");
-            res.redirect('/')
-        }
-    })
-
-
+                console.log(data);
+                res.redirect('/tasks')
+            } else {
+                console.log("pass not match");
+                res.redirect('/')
+            }
+        })
+    } catch {
+        res.redirect('/')
+    }
 })
 
 router.post('/register', function(req, res, next) {
