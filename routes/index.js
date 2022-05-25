@@ -13,12 +13,6 @@ const db = new sqlite3.Database('todo.db')
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
-// ------------------------------* GET home page. * -----------------------------
-// router.get('/', function(req, res, next) {
-//     console.log(req)
-//     res.render('login')
-// })
-
 // ------------------------------ USER INTERFACE ---------------------------------
 
 router.get('/', function(req, res, next) {

@@ -3,6 +3,9 @@ const app = require('../app');
 var router = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
+const lala = require('../routes/index')
+
+console.log(lala.connect('/tasks'))
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -34,8 +37,8 @@ router.post('/enter', function(req, res, next) {
 })
 
 router.post('/register', function(req, res, next) {
-
-    db.run(`INSERT INTO users fname, lname, email, country, hash_password VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass])
+    console.log(req.body);
+    db.run(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass])
 
     console.log('im in register func');
     console.log(req.body);
