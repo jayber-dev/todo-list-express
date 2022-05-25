@@ -47,6 +47,7 @@ label {
 }
 
 input {
+    color: #ffffff;
     background-color: transparent;
     border-bottom: 1px solid #ffffff !important;
 }
