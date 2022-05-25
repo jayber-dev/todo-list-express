@@ -3,7 +3,7 @@ extends layout
 block content  
   link(rel="stylesheet", href="/stylesheets/login.css")
   script(src="../javascript/login.js" defer)
-  a(href="/" class="back-main") Back
+  a(href="/tasks" class="back-main") Back
   
   div(class="w3-mobile")
     div(class="w3-animate-opacity" id="login-form")
@@ -12,7 +12,7 @@ block content
         img(src="../pics/todo-icon.jpg" alt="logo" class="logo-img")
         div(class="w3-margin")
           label(for="Email") Email address
-          input(type="email" class="w3-input sizing" id="Email" aria-describedby="emailHelp" name="email")
+          input(type="email" class="w3-input sizing" id="Email" aria-describedby="emailHelp" name="email" autofocus)
           small(id="emailHelp" class="small-tag") *We'll never share your email with anyone else.
         div(class="w3-margin")
           label(for="exampleInputPassword1") Password

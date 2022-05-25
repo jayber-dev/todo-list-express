@@ -5,6 +5,7 @@ const app = require('../app');
 const session = require('express-session')
     // const data = require("../data.json")
 const { json } = require('express');
+const { render } = require('../app');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
@@ -13,7 +14,15 @@ const db = new sqlite3.Database('todo.db')
 // TODO: build SQL database
 
 // ------------------------------* GET home page. * -----------------------------
+// router.get('/', function(req, res, next) {
+//     console.log(req)
+//     res.render('login')
+// })
+
+// ------------------------------ USER INTERFACE ---------------------------------
+
 router.get('/', function(req, res, next) {
+    console.log(req.session.id)
     const sql = db.all('SELECT * FROM todo WHERE user_id = 1', (err, rows) => {
         if (err) {
             throw err
@@ -56,31 +65,6 @@ router.post('/addItem', (req, res, next) => {
     })
 })
 
-// ------------------------- REGISTER AND LOGIN HANDLING ----------------------------------
 
-router.post('/enter', function(req, res, next) {
-    const data = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], (err, data) => {
-        if (err) { throw err }
-        if (req.body.pass == data.hash_password) {
-
-            console.log(data);
-            res.redirect('/')
-        } else {
-            console.log("pass not match");
-            res.redirect('/login')
-        }
-    })
-
-
-})
-
-router.post('/register', function(req, res, next) {
-
-    db.run(`INSERT INTO users fname, lname, email, country, hash_password VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass])
-
-    console.log('im in register func');
-    console.log(req.body);
-    res.redirect('/')
-})
 
 module.exports = router;
