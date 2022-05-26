@@ -1,11 +1,11 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
 
-var taskRouter = require('./routes/index');
+var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login')
 var app = express();
 
@@ -17,13 +17,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: true }))
-app.use(cookieParser());
+    // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/pics', express.static('public'))
 
+app.use('/', indexRouter)
+app.use('/login', loginRouter)
 
-app.use('/', loginRouter)
-app.use('/tasks', taskRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
