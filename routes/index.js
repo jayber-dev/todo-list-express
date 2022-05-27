@@ -11,9 +11,30 @@ const db = new sqlite3.Database('todo.db')
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
+routerIndex.post('/enter', function(req, res, next) {
+    console.log(req.session.id)
+        // res.setHeader([req.session.cookie])
+    const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
+        if (err) { throw err }
+
+        if (data == undefined) {
+            res.render('login')
+        } else if (req.body.pass == data.hash_password) {
+
+            console.log(data);
+            res.redirect('/interface')
+        } else {
+            console.log("pass not match");
+            res.redirect('/')
+        }
+    })
+    console.log(dbData);
+
+})
+
 // ------------------------------ USER INTERFACE ---------------------------------
 
-routerIndex.get('/', function(req, res, next) {
+routerIndex.get('/interface', function(req, res, next) {
     if (!req.session.id) { res.redirect('/login') }
     console.log(req.session.id)
     console.log(req.session.cookie)
@@ -33,6 +54,7 @@ routerIndex.get('/', function(req, res, next) {
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
 routerIndex.post("/priority", (req, res, next) => {
     console.log(req.session.id)
+    res.sendStatus(200)
     db.run(`UPDATE todo
             SET priority = ?
             WHERE id = ?`,
@@ -63,7 +85,7 @@ routerIndex.post('/addItem', (req, res, next) => {
 
 // ------------------------- REGISTER AND LOGIN HANDLING ----------------------------------
 
-routerIndex.post('/enter', function(req, res, next) {
+routerIndex.post('/', function(req, res, next) {
     console.log(req.session.id)
         // res.setHeader([req.session.cookie])
     const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
