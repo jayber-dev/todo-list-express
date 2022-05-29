@@ -4,6 +4,7 @@ const { send } = require('process');
 const app = require('../app');
 const session = require('express-session')
 const { json } = require('express');
+// const { router } = require('../app');
 const routerIndex = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
@@ -11,7 +12,16 @@ const db = new sqlite3.Database('todo.db')
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
 
-routerIndex.post('/enter', function(req, res, next) {
+function logged(req, res, next) {
+    const userId = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], (err, data) => {
+        return data
+    })
+
+    // console.log(req.sessionID);
+    next()
+}
+
+routerIndex.post('/enter', logged, function(req, res, next) {
     console.log(req.session.id)
         // res.setHeader([req.session.cookie])
     const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
@@ -20,7 +30,8 @@ routerIndex.post('/enter', function(req, res, next) {
             if (data == undefined) {
                 res.render('login')
             } else if (req.body.pass == data.hash_password) {
-                console.log(data);
+                // console.log(data);
+                // console.log(data.id)
                 res.redirect('/interface')
             } else {
                 console.log("pass not match");
@@ -32,10 +43,16 @@ routerIndex.post('/enter', function(req, res, next) {
 
 // ------------------------------ USER INTERFACE ---------------------------------
 
+// function logger(req, res, next) {
+
+// }
+
+
+
 routerIndex.get('/interface', function(req, res, next) {
     if (!req.session.id) { res.redirect('/login') }
     console.log(req.session.id)
-    console.log(req.session.cookie)
+        // console.log(req.session.cookie)
     const sql = db.all('SELECT * FROM todo WHERE user_id = 1', (err, rows) => {
         if (err) {
             throw err
@@ -85,28 +102,28 @@ routerIndex.post('/addItem', (req, res, next) => {
 
 // ------------------------- REGISTER AND LOGIN HANDLING ----------------------------------
 
-routerIndex.post('/', function(req, res, next) {
-    console.log(req.session.id)
-    res.sendStatus(200)
-        // res.setHeader([req.session.cookie])
-    const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
-        if (err) { throw err }
+// routerIndex.post('/', function(req, res, next) {
+//     console.log(req.session.id)
+//     res.sendStatus(200)
+//         // res.setHeader([req.session.cookie])
+//     const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
+//         if (err) { throw err }
 
-        if (data == undefined) {
-            res.render('login')
-        } else if (req.body.pass == data.hash_password) {
+//         if (data == undefined) {
+//             res.render('login')
+//         } else if (req.body.pass == data.hash_password) {
 
-            console.log(data);
-            res.redirect('/tasks')
-        } else {
-            console.log("pass not match");
-            res.redirect('/')
-        }
-    })
-    res.redirect('/')
-    console.log(dbData);
+//             console.log(data);
+//             res.redirect('/tasks')
+//         } else {
+//             console.log("pass not match");
+//             res.redirect('/')
+//         }
+//     })
+//     res.redirect('/')
+//     console.log(dbData);
 
-})
+// })
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
