@@ -28,7 +28,6 @@ routerIndex.post('/enter', function(req, res, next) {
             }
         })
         // console.log(dbData);
-
 })
 
 // ------------------------------ USER INTERFACE ---------------------------------
