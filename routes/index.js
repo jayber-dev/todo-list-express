@@ -5,7 +5,6 @@ const app = require('../app');
 const session = require('express-session')
     // const data = require("../data.json")
 const { json } = require('express');
-const { render } = require('../app');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
