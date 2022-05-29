@@ -62,6 +62,7 @@ routerIndex.post("/priority", (req, res, next) => {
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 routerIndex.post('/handle', (req, res, next) => {
     console.log(req.session.id)
+    res.sendStatus(200)
     db.run(`DELETE FROM todo 
             WHERE id = ?`,
         req.body.itemId)
@@ -70,6 +71,7 @@ routerIndex.post('/handle', (req, res, next) => {
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
 routerIndex.post('/addItem', (req, res, next) => {
     console.log(req.session.id)
+    res.sendStatus(200)
     console.log("im inside the additem")
     db.serialize(() => {
         const stmt = db.prepare(`INSERT INTO todo
@@ -85,6 +87,7 @@ routerIndex.post('/addItem', (req, res, next) => {
 
 routerIndex.post('/', function(req, res, next) {
     console.log(req.session.id)
+    res.sendStatus(200)
         // res.setHeader([req.session.cookie])
     const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
         if (err) { throw err }
@@ -108,6 +111,7 @@ routerIndex.post('/', function(req, res, next) {
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
 routerIndex.post('/register', function(req, res, next) {
+    res.sendStatus(200)
     console.log(req.session.id)
     db.run(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass])
     console.log('im in register func');
