@@ -4,6 +4,7 @@ const { send } = require('process');
 const app = require('../app');
 const session = require('express-session')
 const { json } = require('express');
+const { redirect } = require('express/lib/response');
 // const { router } = require('../app');
 const routerIndex = express.Router();
 const sqlite3 = require('sqlite3').verbose()
@@ -11,34 +12,39 @@ const db = new sqlite3.Database('todo.db')
 
 // TODO: check sqlite at work for progress
 // TODO: build SQL database
+// let varified = ""
 
-function logged(req, res, next) {
-    const userId = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], (err, data) => {
-        return data
+function userVarification(req, res, next) {
+    // console.log(res.headersSent);
+    const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
+        if (err) { throw err }
+        next()
+        if (data == undefined) {
+            // res.render('login')
+        } else if (req.body.pass == data.hash_password) {
+            // console.log(data);
+            // console.log(data.id)
+            // res.userLogged = true
+            // return req.userData = `user with ${data.id} by the name ${data.fname} and with ${data.email} is logged.`
+            next()
+                // console.log(res.header);
+                // res.redirect('/interface')
+        } else {
+            // res.send(500)
+            next()
+        }
     })
 
     // console.log(req.sessionID);
     next()
 }
 
-routerIndex.post('/enter', logged, function(req, res, next) {
+routerIndex.post('/enter', function(req, res, next) {
     console.log(req.session.id)
-        // res.setHeader([req.session.cookie])
-    const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
-            if (err) { throw err }
 
-            if (data == undefined) {
-                res.render('login')
-            } else if (req.body.pass == data.hash_password) {
-                // console.log(data);
-                // console.log(data.id)
-                res.redirect('/interface')
-            } else {
-                console.log("pass not match");
-                res.redirect('/')
-            }
-        })
-        // console.log(dbData);
+    // res.setHeader([req.session.cookie])
+
+    // console.log(dbData);
 })
 
 // ------------------------------ USER INTERFACE ---------------------------------
@@ -49,10 +55,8 @@ routerIndex.post('/enter', logged, function(req, res, next) {
 
 
 
-routerIndex.get('/interface', function(req, res, next) {
-    if (!req.session.id) { res.redirect('/login') }
-    console.log(req.session.id)
-        // console.log(req.session.cookie)
+routerIndex.post('/interface', function(req, res, next) {
+    console.log(req.userData);
     const sql = db.all('SELECT * FROM todo WHERE user_id = 1', (err, rows) => {
         if (err) {
             throw err
@@ -64,6 +68,7 @@ routerIndex.get('/interface', function(req, res, next) {
             jslink: '/javascripts/index.js'
         });
     });
+
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
