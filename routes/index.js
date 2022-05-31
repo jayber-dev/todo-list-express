@@ -16,35 +16,27 @@ const db = new sqlite3.Database('todo.db')
 
 function userVarification(req, res, next) {
     // console.log(res.headersSent);
-    const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-        if (err) { throw err }
-        next()
-        if (data == undefined) {
-            // res.render('login')
-        } else if (req.body.pass == data.hash_password) {
-            // console.log(data);
-            // console.log(data.id)
-            // res.userLogged = true
-            // return req.userData = `user with ${data.id} by the name ${data.fname} and with ${data.email} is logged.`
-            next()
-                // console.log(res.header);
-                // res.redirect('/interface')
-        } else {
-            // res.send(500)
-            next()
-        }
-    })
 
     // console.log(req.sessionID);
     next()
 }
 
 routerIndex.post('/enter', function(req, res, next) {
-    console.log(req.session.id)
+    const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+        }
+        if (data == undefined) {
+            res.render('login')
+        } else if (req.body.pass == data.hash_password) {
+            res.redirect(`/interface/${data.id}`)
+        } else {
+            res.render('login')
+        }
+    })
 
-    // res.setHeader([req.session.cookie])
-
-    // console.log(dbData);
 })
 
 // ------------------------------ USER INTERFACE ---------------------------------
@@ -55,9 +47,9 @@ routerIndex.post('/enter', function(req, res, next) {
 
 
 
-routerIndex.post('/interface', function(req, res, next) {
-    console.log(req.userData);
-    const sql = db.all('SELECT * FROM todo WHERE user_id = 1', (err, rows) => {
+routerIndex.get('/interface/:id', function(req, res, next) {
+    console.log(req.params);
+    const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.params.id}`, (err, rows) => {
         if (err) {
             throw err
         }
