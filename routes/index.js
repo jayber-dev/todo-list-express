@@ -14,59 +14,48 @@ const db = new sqlite3.Database('todo.db')
 // TODO: build SQL database
 // let varified = ""
 
-function userVarification(req, res, next) {
-    // console.log(res.headersSent);
+exports.validation = (req, res, next) => {
+    req.user_logged = true
+    console.log(req.body.email);
     const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-        if (err) { throw err }
-        next()
-        if (data == undefined) {
-            // res.render('login')
-        } else if (req.body.pass == data.hash_password) {
-            // console.log(data);
-            // console.log(data.id)
-            // res.userLogged = true
-            // return req.userData = `user with ${data.id} by the name ${data.fname} and with ${data.email} is logged.`
+        console.log(data);
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return next();
+        }
+
+        if (req.body.pass == data.hash_password) {
+            req.user_id = data.id
+            req.user_logged = true;
             next()
-                // console.log(res.header);
-                // res.redirect('/interface')
+
         } else {
-            // res.send(500)
+            req.user_logged = false;
             next()
         }
     })
-
-    // console.log(req.sessionID);
-    next()
 }
 
-routerIndex.post('/enter', function(req, res, next) {
-    console.log(req.session.id)
+routerIndex.post('/interface', this.validation, function(req, res, next) {
+    // console.log(req.params);
+    console.log(req.user_logged);
+    if (!req.user_logged) res.redirect('/');
 
-    // res.setHeader([req.session.cookie])
+    const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
 
-    // console.log(dbData);
-})
-
-// ------------------------------ USER INTERFACE ---------------------------------
-
-// function logger(req, res, next) {
-
-// }
-
-
-
-routerIndex.post('/interface', function(req, res, next) {
-    console.log(req.userData);
-    const sql = db.all('SELECT * FROM todo WHERE user_id = 1', (err, rows) => {
         if (err) {
             throw err
         }
         res.render('index', {
             title: "Manage your tasks",
             toList: rows,
+            user_id: req.params.id,
             csslink: '../stylesheets/style.css',
             jslink: '/javascripts/index.js'
         });
+
+
     });
 
 })
