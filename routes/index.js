@@ -14,8 +14,6 @@ const db = new sqlite3.Database('todo.db')
 // TODO: build SQL database
 // let varified = ""
 
-
-
 exports.validation = (req, res, next) => {
     req.user_logged = true
     console.log(req.body.email);
@@ -25,43 +23,26 @@ exports.validation = (req, res, next) => {
             console.log(err);
             res.sendStatus(500);
             return next();
-        } else if (req.body.pass == data.hash_password) {
+        }
+
+        if (req.body.pass == data.hash_password) {
             req.user_id = data.id
             req.user_logged = true;
-            next();
+            next()
 
         } else {
             req.user_logged = false;
-            next();
+            next()
         }
-
     })
 }
 
-routerIndex.post('/enter', this.validation, function(req, res, next) {
-    console.log(req.user_logged);
-    if (req.user_logged == true) {
-        res.redirect(`/interface/${req.user_id}`)
-    } else {
-        res.sendStatus(503)
-    }
-
-
-})
-
-// ------------------------------ USER INTERFACE ---------------------------------
-
-// function logger(req, res, next) {
-
-// }
-
-
-
-routerIndex.get('/interface/:id', function(req, res, next) {
+routerIndex.post('/interface', this.validation, function(req, res, next) {
     // console.log(req.params);
     console.log(req.user_logged);
-    // if (!req.user_logged) { res.sendStatus(503) }
-    const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.params.id}`, (err, rows) => {
+    if (!req.user_logged) res.redirect('/');
+
+    const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
 
         if (err) {
             throw err
