@@ -1,7 +1,6 @@
 extends layout
 
 block content
-  
   div(class="header")
     a(href="/") login/register 
     div
@@ -23,7 +22,7 @@ block content
           if (val["priority"] == 1)
             div(class="container-high drag" draggable="true")
               p(class="todo-item")= val['task'] 
-              p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+              p(class="del-item" id=`${val.id}` data=`${user_id}` onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
               p(class="todo-item dummy-item") Drag item here

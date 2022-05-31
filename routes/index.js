@@ -14,28 +14,38 @@ const db = new sqlite3.Database('todo.db')
 // TODO: build SQL database
 // let varified = ""
 
-function userVarification(req, res, next) {
-    // console.log(res.headersSent);
 
-    // console.log(req.sessionID);
-    next()
-}
 
-routerIndex.post('/enter', function(req, res, next) {
+exports.validation = (req, res, next) => {
+    req.user_logged = true
+    console.log(req.body.email);
     const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
+        console.log(data);
         if (err) {
             console.log(err);
             res.sendStatus(500);
-            return;
-        }
-        if (data == undefined) {
-            res.render('login')
+            return next();
         } else if (req.body.pass == data.hash_password) {
-            res.redirect(`/interface/${data.id}`)
+            req.user_id = data.id
+            req.user_logged = true;
+            next();
+
         } else {
-            res.render('login')
+            req.user_logged = false;
+            next();
         }
+
     })
+}
+
+routerIndex.post('/enter', this.validation, function(req, res, next) {
+    console.log(req.user_logged);
+    if (req.user_logged == true) {
+        res.redirect(`/interface/${req.user_id}`)
+    } else {
+        res.sendStatus(503)
+    }
+
 
 })
 
@@ -48,17 +58,23 @@ routerIndex.post('/enter', function(req, res, next) {
 
 
 routerIndex.get('/interface/:id', function(req, res, next) {
-    console.log(req.params);
+    // console.log(req.params);
+    console.log(req.user_logged);
+    // if (!req.user_logged) { res.sendStatus(503) }
     const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.params.id}`, (err, rows) => {
+
         if (err) {
             throw err
         }
         res.render('index', {
             title: "Manage your tasks",
             toList: rows,
+            user_id: req.params.id,
             csslink: '../stylesheets/style.css',
             jslink: '/javascripts/index.js'
         });
+
+
     });
 
 })
