@@ -2,61 +2,81 @@ const express = require('express');
 const coockie = require('cookie-parser')
 const { send } = require('process');
 const app = require('../app');
-const session = require('express-session')
+const ses = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
+const { error } = require('console');
 // const { router } = require('../app');
 const routerIndex = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 
-// TODO: check sqlite at work for progress
+// TODO: make a session
 // TODO: build SQL database
 // let varified = ""
+
+// ------------------------ LOGIN HANDLER ----------------------------------
 
 exports.validation = (req, res, next) => {
     req.user_logged = true
     console.log(req.body.email);
-    const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-        console.log(data);
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return next();
-        }
+    if (req.body.email !== '' || req.body.pass !== '') {
+        const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
 
-        if (req.body.pass == data.hash_password) {
-            req.user_id = data.id
-            req.user_logged = true;
-            next()
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+                return next();
+            }
+            if ('undefined' === typeof data) {
+                req.user_logged = false;
+                return next()
+            } else if (req.body.pass == data.hash_password) {
+                req.user_id = data.id
+                req.user_logged = true;
+                next()
+            } else {
 
-        } else {
-            req.user_logged = false;
-            next()
-        }
-    })
+                req.user_logged = false;
+                next()
+            }
+        })
+    } else {
+        req.user_logged = false;
+        next()
+    }
+
 }
+
+// -------------------------- MAIN TASKS PAGE ------------------------------------------
 
 routerIndex.post('/interface', this.validation, function(req, res, next) {
     // console.log(req.params);
     console.log(req.user_logged);
-    if (!req.user_logged) res.redirect('/');
+    if (!req.user_logged) { res.redirect('/'); } else {
 
-    const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
+        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
 
-        if (err) {
-            throw err
-        }
-        res.render('index', {
-            title: "Manage your tasks",
-            toList: rows,
-            user_id: req.params.id,
-            csslink: '../stylesheets/style.css',
-            jslink: '/javascripts/index.js'
+            if (err) {
+                throw err
+            }
+            console.log(req.sessionID)
+            res.cookie(`user_id`, `${req.user_id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
+            res.render('index', {
+                title: "Manage your tasks",
+                toList: rows,
+                user_id: req.user_id,
+                csslink: '../stylesheets/style.css',
+                jslink: '/javascripts/index.js'
+            });
         });
+    }
+})
 
+routerIndex.get('/interface', function(req, res, next) {
+    console.log(req);
 
-    });
+    res.sendStatus(401)
 
 })
 
@@ -86,38 +106,13 @@ routerIndex.post('/addItem', (req, res, next) => {
     console.log("im inside the additem")
     db.serialize(() => {
         const stmt = db.prepare(`INSERT INTO todo
-                                 (task, priority) 
-                                 VALUES('${req.body.content}',1)`)
+                                 (task, priority,user_id) 
+                                 VALUES('${req.body.content}',1,${req.body.user_id})`)
         stmt.run()
         stmt.finalize()
     })
 })
 
-
-// ------------------------- REGISTER AND LOGIN HANDLING ----------------------------------
-
-// routerIndex.post('/', function(req, res, next) {
-//     console.log(req.session.id)
-//     res.sendStatus(200)
-//         // res.setHeader([req.session.cookie])
-//     const dbData = db.get(`SELECT id, email, hash_password From users WHERE email = ?`, [req.body.email], function(err, data) {
-//         if (err) { throw err }
-
-//         if (data == undefined) {
-//             res.render('login')
-//         } else if (req.body.pass == data.hash_password) {
-
-//             console.log(data);
-//             res.redirect('/tasks')
-//         } else {
-//             console.log("pass not match");
-//             res.redirect('/')
-//         }
-//     })
-//     res.redirect('/')
-//     console.log(dbData);
-
-// })
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
