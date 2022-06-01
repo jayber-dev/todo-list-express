@@ -2,7 +2,7 @@ const express = require('express');
 const coockie = require('cookie-parser')
 const { send } = require('process');
 const app = require('../app');
-const ses = require('express-session')
+const session = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
 const { error } = require('console');
@@ -61,7 +61,7 @@ routerIndex.post('/interface', this.validation, function(req, res, next) {
                 throw err
             }
             console.log(req.sessionID)
-            res.cookie(`user_id`, `${req.user_id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
+            res.cookie(`user_id`, `${req.user_id}`, { secret: 'wow', expires: new Date(Date.now() + 900000), httpOnly: true })
             res.render('index', {
                 title: "Manage your tasks",
                 toList: rows,
@@ -74,15 +74,13 @@ routerIndex.post('/interface', this.validation, function(req, res, next) {
 })
 
 routerIndex.get('/interface', function(req, res, next) {
-    console.log(req);
-
+    console.log(res.cookie(4))
     res.sendStatus(401)
-
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
 routerIndex.post("/priority", (req, res, next) => {
-    console.log(req.session.id)
+
     res.sendStatus(200)
     db.run(`UPDATE todo
             SET priority = ?
