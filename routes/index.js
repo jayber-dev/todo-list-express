@@ -2,7 +2,7 @@ const express = require('express');
 const coockie = require('cookie-parser')
 const { send } = require('process');
 const app = require('../app');
-const session = require('express-session')
+const ses = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
 const { error } = require('console');
@@ -11,7 +11,7 @@ const routerIndex = express.Router();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 
-// TODO: check sqlite at work for progress
+// TODO: make a session
 // TODO: build SQL database
 // let varified = ""
 
@@ -20,16 +20,18 @@ const db = new sqlite3.Database('todo.db')
 exports.validation = (req, res, next) => {
     req.user_logged = true
     console.log(req.body.email);
-    if (req.body.email !== '' || req.body.pass) {
+    if (req.body.email !== '' || req.body.pass !== '') {
         const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-            console.log(data);
+
             if (err) {
                 console.log(err);
                 res.sendStatus(500);
                 return next();
             }
-
-            if (req.body.pass == data.hash_password) {
+            if ('undefined' === typeof data) {
+                req.user_logged = false;
+                return next()
+            } else if (req.body.pass == data.hash_password) {
                 req.user_id = data.id
                 req.user_logged = true;
                 next()
@@ -58,6 +60,8 @@ routerIndex.post('/interface', this.validation, function(req, res, next) {
             if (err) {
                 throw err
             }
+            console.log(req.sessionID)
+            res.cookie(`user_id`, `${req.user_id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
             res.render('index', {
                 title: "Manage your tasks",
                 toList: rows,
@@ -67,6 +71,13 @@ routerIndex.post('/interface', this.validation, function(req, res, next) {
             });
         });
     }
+})
+
+routerIndex.get('/interface', function(req, res, next) {
+    console.log(req);
+
+    res.sendStatus(401)
+
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
