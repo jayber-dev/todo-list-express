@@ -12,11 +12,12 @@ function removeItem(e, itemData) {
 // ------------------ ADD ITEM TO LIST ---------------------------------------
 document.getElementById('iteminput').addEventListener('keyup', (e) => {
     if (e.key == "Enter") {
+        const user_id = document.getElementsByClassName('header')
         let userValue = e.target.value
         const req = new XMLHttpRequest();
         req.open("post", "/addItem", true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        req.send(body = `content=${userValue}&priority=${e.target.high = 1}`)
+        req.send(body = `content=${userValue}&priority=${e.target.high = 1}&user_id=${user_id[0].getAttribute('data')}`)
         document.location.reload(true)
     }
 })
@@ -48,13 +49,10 @@ dragItemElems.forEach(() => {
         req.open("post", "priority", true)
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         if (e.target.parentElement.classList == 'color-low') {
-            console.log('low priority');
             req.send(body = `priority=3&id=${e.target.children[1].id}`)
         } else if (e.target.parentElement.classList == 'color-med') {
-            console.log('med priority');
             req.send(body = `priority=2&id=${e.target.children[1].id}`)
         } else if (e.target.parentElement.classList == 'color-high') {
-            console.log('high priority');
             req.send(body = `priority=1&id=${e.target.children[1].id}`)
         }
     }, true)
@@ -63,7 +61,6 @@ dragItemElems.forEach(() => {
 dropContainerElem.forEach(() => {
     addEventListener('dragover', (e) => {
         e.stopImmediatePropagation()
-        console.log(e);
         e.dataTransfer.dropEffect = 'move';
         e.preventDefault();
         if (e.target.className == "container-low drop-box" || e.target.className == "todo-item dummy-item") {

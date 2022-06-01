@@ -5,6 +5,7 @@ const app = require('../app');
 const session = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
+const { error } = require('console');
 // const { router } = require('../app');
 const routerIndex = express.Router();
 const sqlite3 = require('sqlite3').verbose()
@@ -17,47 +18,51 @@ const db = new sqlite3.Database('todo.db')
 exports.validation = (req, res, next) => {
     req.user_logged = true
     console.log(req.body.email);
-    const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-        console.log(data);
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return next();
-        }
+    if (req.body.email !== '' || req.body.pass) {
+        const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
+            console.log(data);
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+                return next();
+            }
 
-        if (req.body.pass == data.hash_password) {
-            req.user_id = data.id
-            req.user_logged = true;
-            next()
+            if (req.body.pass == data.hash_password) {
+                req.user_id = data.id
+                req.user_logged = true;
+                next()
+            } else {
 
-        } else {
-            req.user_logged = false;
-            next()
-        }
-    })
+                req.user_logged = false;
+                next()
+            }
+        })
+    } else {
+        req.user_logged = false;
+        next()
+    }
+
 }
 
 routerIndex.post('/interface', this.validation, function(req, res, next) {
     // console.log(req.params);
     console.log(req.user_logged);
-    if (!req.user_logged) res.redirect('/');
+    if (!req.user_logged) { res.redirect('/'); } else {
 
-    const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
+        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
 
-        if (err) {
-            throw err
-        }
-        res.render('index', {
-            title: "Manage your tasks",
-            toList: rows,
-            user_id: req.params.id,
-            csslink: '../stylesheets/style.css',
-            jslink: '/javascripts/index.js'
+            if (err) {
+                throw err
+            }
+            res.render('index', {
+                title: "Manage your tasks",
+                toList: rows,
+                user_id: req.user_id,
+                csslink: '../stylesheets/style.css',
+                jslink: '/javascripts/index.js'
+            });
         });
-
-
-    });
-
+    }
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
@@ -86,8 +91,8 @@ routerIndex.post('/addItem', (req, res, next) => {
     console.log("im inside the additem")
     db.serialize(() => {
         const stmt = db.prepare(`INSERT INTO todo
-                                 (task, priority) 
-                                 VALUES('${req.body.content}',1)`)
+                                 (task, priority,user_id) 
+                                 VALUES('${req.body.content}',1,${req.body.user_id})`)
         stmt.run()
         stmt.finalize()
     })
