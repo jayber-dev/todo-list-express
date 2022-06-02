@@ -23,8 +23,8 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: '1234', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: true }))
-    // app.use(cookieParser());
+// app.use(session({ secret: '1234', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: true }))
+// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/pics', express.static('public'))
 

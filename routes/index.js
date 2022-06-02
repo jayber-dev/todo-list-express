@@ -15,14 +15,15 @@ const db = new sqlite3.Database('todo.db')
 // TODO: build SQL database
 // let varified = ""
 
-// ------------------------ LOGIN HANDLER ----------------------------------
+let users = []
 
-exports.validation = (req, res, next) => {
+// ------------------------ LOGIN HANDLER FUNCTION----------------------------------
+routerIndex.use(session({ secret: '1234', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: true }))
+
+const validation = (req, res, next) => {
     req.user_logged = true
-    console.log(req.body.email);
     if (req.body.email !== '' || req.body.pass !== '') {
         const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-
             if (err) {
                 console.log(err);
                 res.sendStatus(500);
@@ -32,11 +33,13 @@ exports.validation = (req, res, next) => {
                 req.user_logged = false;
                 return next()
             } else if (req.body.pass == data.hash_password) {
-                req.user_id = data.id
-                req.user_logged = true;
-                next()
+                const loggedUser = { userId: data.id, email: data.email, fname: data.fname, lname: data.lname }
+                users.push(loggedUser)
+                req.session.user = loggedUser
+                    // console.log(req.session.user);
+                res.cookie(`user_id`, `${req.user_id =data.id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
+                return req.user_id = data.id, req.user_logged = true, req.session.user, next()
             } else {
-
                 req.user_logged = false;
                 next()
             }
@@ -48,20 +51,26 @@ exports.validation = (req, res, next) => {
 
 }
 
+const isLogged = function(req, res, next) {
+    console.log('wow');
+    const data = req.session['user'];
+    // console.log(users);
+    console.log(data);
+    return data, next()
+}
+
+
 // -------------------------- MAIN TASKS PAGE ------------------------------------------
 
-routerIndex.post('/interface', this.validation, function(req, res, next) {
-    // console.log(req.params);
-    console.log(req.user_logged);
-    if (!req.user_logged) { res.redirect('/'); } else {
+routerIndex.post('/interface', validation, isLogged, function(req, res, next) {
 
+    if (!req.user_logged) { res.redirect('/'); } else {
         const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
 
             if (err) {
                 throw err
             }
-            console.log(req.sessionID)
-            res.cookie(`user_id`, `${req.user_id}`, { secret: 'wow', expires: new Date(Date.now() + 900000), httpOnly: true })
+
             res.render('index', {
                 title: "Manage your tasks",
                 toList: rows,
@@ -73,9 +82,32 @@ routerIndex.post('/interface', this.validation, function(req, res, next) {
     }
 })
 
-routerIndex.get('/interface', function(req, res, next) {
-    console.log(res.cookie(4))
-    res.sendStatus(401)
+
+
+routerIndex.get('/interface', isLogged, function(req, res, next) {
+
+    // console.log(req.session['user'].userId)
+    // const re = new RegExp('/user_id=/\d//');
+    // console.log(req.headers.cookie.match(`${re}`));
+    console.log(req.headers.cookie.substring(42, 45));
+    if (req.headers.cookie) {
+        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.headers.cookie.substring(42,45)}`, (err, rows) => {
+
+            if (err) {
+                throw err
+            }
+
+            res.render('index', {
+                title: "Manage your tasks",
+                toList: rows,
+                user_id: req.user_id,
+                csslink: '../stylesheets/style.css',
+                jslink: '/javascripts/index.js'
+            });
+        });
+    } else {
+        res.sendStatus(403)
+    }
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
