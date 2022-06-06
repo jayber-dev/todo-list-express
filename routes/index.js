@@ -6,6 +6,7 @@ const session = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
 const { error } = require('console');
+
 // const { router } = require('../app');
 const routerIndex = express.Router();
 const sqlite3 = require('sqlite3').verbose()
@@ -37,8 +38,8 @@ const validation = (req, res, next) => {
                 users.push(loggedUser)
                 req.session.user = loggedUser
                     // console.log(req.session.user);
-                res.cookie(`user_id`, `${req.user_id =data.id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
-                return req.user_id = data.id, req.user_logged = true, req.session.user, next()
+                    // res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
+                return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 10000), httpOnly: true }), next()
             } else {
                 req.user_logged = false;
                 next()
@@ -51,20 +52,15 @@ const validation = (req, res, next) => {
 
 }
 
-const isLogged = function(req, res, next) {
-    console.log('wow');
-    const data = req.session['user'];
-    // console.log(users);
-    console.log(data);
-    return data, next()
-}
 
 
 // -------------------------- MAIN TASKS PAGE ------------------------------------------
 
-routerIndex.post('/interface', validation, isLogged, function(req, res, next) {
-
-    if (!req.user_logged) { res.redirect('/'); } else {
+routerIndex.post('/interface', validation, function(req, res, next) {
+    console.log(req.user_id);
+    if (!req.user_logged) {
+        res.render('login', { message: '*Fill in correct credentials' });
+    } else {
         const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
 
             if (err) {
@@ -83,31 +79,10 @@ routerIndex.post('/interface', validation, isLogged, function(req, res, next) {
 })
 
 
+routerIndex.get('/interface', function(req, res, next) {
 
-routerIndex.get('/interface', isLogged, function(req, res, next) {
+    res.sendStatus(200)
 
-    // console.log(req.session['user'].userId)
-    // const re = new RegExp('/user_id=/\d//');
-    // console.log(req.headers.cookie.match(`${re}`));
-    console.log(req.headers.cookie.substring(42, 45));
-    if (req.headers.cookie) {
-        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.headers.cookie.substring(42,45)}`, (err, rows) => {
-
-            if (err) {
-                throw err
-            }
-
-            res.render('index', {
-                title: "Manage your tasks",
-                toList: rows,
-                user_id: req.user_id,
-                csslink: '../stylesheets/style.css',
-                jslink: '/javascripts/index.js'
-            });
-        });
-    } else {
-        res.sendStatus(403)
-    }
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
