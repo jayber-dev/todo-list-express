@@ -78,12 +78,12 @@ routerIndex.get('/interface', function(req, res, next) {
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
 routerIndex.post("/priority", (req, res, next) => {
-
+    console.log(req.body);
     res.sendStatus(200)
     db.run(`UPDATE todo
             SET priority = ?
-            WHERE id = ?`,
-        req.body.priority, req.body.id)
+            WHERE itemId = ?`,
+        req.body.priority, req.body.itemId)
 })
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
@@ -91,20 +91,21 @@ routerIndex.post('/handle', (req, res, next) => {
     console.log(req.session.id)
     res.sendStatus(200)
     db.run(`DELETE FROM todo 
-            WHERE id = ?`,
+            WHERE itemId = ?`,
         req.body.itemId)
 })
 
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
 routerIndex.post('/addItem', (req, res, next) => {
     console.log(req.session.id)
-
+    console.log(req.body.itemId);
     console.log("im inside the additem")
     db.serialize(() => {
         const stmt = db.prepare(`INSERT INTO todo
-                                 (task, priority,user_id) 
-                                 VALUES('${req.body.content}',1,${req.session.user['userId']})`)
+                                 (itemId, task, priority, user_id) 
+                                 VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
             //  req.body.user_id
+            // ${req.body.content}', 1, ${req.session.user['userId']}
         stmt.run()
         stmt.finalize()
         res.sendStatus(200)
@@ -115,12 +116,29 @@ routerIndex.post('/addItem', (req, res, next) => {
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
 routerIndex.post('/register', function(req, res, next) {
-    res.sendStatus(200)
+
     console.log(req.session.id)
-    db.run(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass])
-    console.log('im in register func');
-    console.log(req.body);
-    res.redirect('tasks')
+    try {
+        db.serialize(async() => {
+            try {
+                var stmt = db.prepare(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass]);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                stmt.run()
+                stmt.finalize()
+            }
+        })
+        console.log('im in register func');
+        console.log(req.body);
+        res.redirect('/')
+    } catch (err) {
+        console.log(err);
+        // res.render('login', { message: "email already exist" })
+    }
+
+
+    // res.render('login', { message: '<p style="color:blue">Thank you for registering</p>' })
 })
 
 routerIndex.get('/logout', (req, res, next) => {

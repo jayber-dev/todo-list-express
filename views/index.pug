@@ -11,7 +11,7 @@ block content
   br
   div(class="input-container")
     label(for="todoItem") Enter a task - &nbsp
-    input(type="text" name="todoItem" id="iteminput" focus)
+    input(type="text" name="todoItem" id="iteminput" focus value="")
     p Press enter
   
   div(class="global-list")
@@ -22,7 +22,7 @@ block content
           if (val["priority"] == 1)
             div(class="container-high drag" draggable="true")
               p(class="todo-item")= val['task'] 
-              p(class="del-item" id=`${val.id}`  onclick=`removeItem(event,this)`) x
+              p(class="del-item" id=`${val.itemId}`  onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
               p(class="todo-item dummy-item") Drag item here
@@ -34,8 +34,8 @@ block content
         each val in toList
           if (val['priority'] == 2)
             div(class='container-medium drag' draggable="true")
-              p(class="todo-item")= val['task'] 
-              p(class="del-item" id=`${val.id}`  onclick=`removeItem(event,this)`) x
+              p(class="todo-item")= val['task']
+              p(class="del-item" id=`${val.itemId}`  onclick=`removeItem(event,this)`) x
       div
         div(class='drop-box')
               p(class="todo-item dummy-item") Drag item here
@@ -48,7 +48,7 @@ block content
           if (val['priority'] == 3)
             div(class='container-low drag' draggable="true")
               p(class="todo-item")= val['task'] 
-              p(class="del-item" id=`${val.id}` onclick=`removeItem(event,this)`) x
+              p(class="del-item" id=`${val.itemId}` onclick=`removeItem(event,this)`) x
       div
         div(class=' drop-box')
               p(class="todo-item dummy-item") Drag item here
