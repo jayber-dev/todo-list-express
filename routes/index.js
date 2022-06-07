@@ -6,6 +6,7 @@ const session = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
 const { error } = require('console');
+const req = require('express/lib/request');
 
 // const { router } = require('../app');
 const routerIndex = express.Router();
@@ -17,9 +18,9 @@ const db = new sqlite3.Database('todo.db')
 // let varified = ""
 
 let users = []
+routerIndex.use(session({ secret: '1234', cookie: { maxAge: 10 * 100000 }, resave: false, saveUninitialized: true }))
 
 // ------------------------ LOGIN HANDLER FUNCTION----------------------------------
-routerIndex.use(session({ secret: '1234', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: true }))
 
 const validation = (req, res, next) => {
     req.user_logged = true
@@ -37,9 +38,7 @@ const validation = (req, res, next) => {
                 const loggedUser = { userId: data.id, email: data.email, fname: data.fname, lname: data.lname }
                 users.push(loggedUser)
                 req.session.user = loggedUser
-                    // console.log(req.session.user);
-                    // res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 900000), httpOnly: true })
-                return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 10000), httpOnly: true }), next()
+                return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 0), httpOnly: true }), next()
             } else {
                 req.user_logged = false;
                 next()
@@ -53,20 +52,19 @@ const validation = (req, res, next) => {
 }
 
 
-
 // -------------------------- MAIN TASKS PAGE ------------------------------------------
 
-routerIndex.post('/interface', validation, function(req, res, next) {
-    console.log(req.user_id);
-    if (!req.user_logged) {
+routerIndex.get('/interface', function(req, res, next) {
+    console.log(req.sessionID);
+    console.log(req.session.user);
+    if (!req.session.user) {
         res.render('login', { message: '*Fill in correct credentials' });
     } else {
-        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.user_id}`, (err, rows) => {
+        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`, (err, rows) => {
 
             if (err) {
                 throw err
             }
-
             res.render('index', {
                 title: "Manage your tasks",
                 toList: rows,
@@ -76,13 +74,6 @@ routerIndex.post('/interface', validation, function(req, res, next) {
             });
         });
     }
-})
-
-
-routerIndex.get('/interface', function(req, res, next) {
-
-    res.sendStatus(200)
-
 })
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
@@ -107,14 +98,16 @@ routerIndex.post('/handle', (req, res, next) => {
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
 routerIndex.post('/addItem', (req, res, next) => {
     console.log(req.session.id)
-    res.sendStatus(200)
+
     console.log("im inside the additem")
     db.serialize(() => {
         const stmt = db.prepare(`INSERT INTO todo
                                  (task, priority,user_id) 
-                                 VALUES('${req.body.content}',1,${req.body.user_id})`)
+                                 VALUES('${req.body.content}',1,${req.session.user['userId']})`)
+            //  req.body.user_id
         stmt.run()
         stmt.finalize()
+        res.sendStatus(200)
     })
 })
 
@@ -130,5 +123,9 @@ routerIndex.post('/register', function(req, res, next) {
     res.redirect('tasks')
 })
 
+routerIndex.get('/logout', (req, res, next) => {
+    req.session.user = ""
+    res.redirect('/')
+})
 
 module.exports = routerIndex;
