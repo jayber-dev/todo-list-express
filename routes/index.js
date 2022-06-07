@@ -18,7 +18,7 @@ const db = new sqlite3.Database('todo.db')
 // let varified = ""
 
 let users = []
-routerIndex.use(session({ secret: '1234', cookie: { maxAge: 10 * 100000 }, resave: false, saveUninitialized: true }))
+routerIndex.use(session({ secret: '1234', cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: true }))
 
 // ------------------------ LOGIN HANDLER FUNCTION----------------------------------
 
