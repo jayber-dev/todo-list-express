@@ -107,6 +107,7 @@ input {
 }
 
 .back-login {
+    color: var(--item-text-color);
     margin-left: 20px;
     text-decoration: none;
 }

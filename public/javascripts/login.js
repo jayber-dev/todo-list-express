@@ -1,4 +1,5 @@
 function registerBlock() {
+    event.preventDefault()
     let registrationForm = document.getElementById("form-modal");
     let loginForm = document.getElementById('login-form');
 

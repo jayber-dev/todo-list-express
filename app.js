@@ -1,5 +1,3 @@
-'use strict';
-
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -9,7 +7,7 @@ const session = require('express-session')
 var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
-const passport = require('passport')
+
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -65,13 +63,20 @@ app.get('/', function(req, res, next) {
     }
     res.render('login', {
         csslink: '../stylesheets/login.css',
-        jslink: '/javascripts/login.js'
+        jslink: '../javascripts/login.js',
+        message: req.session.message
     });
 });
 
 app.post('/', validation, function(req, res) {
     if (!req.user_logged) {
-        res.render('login', { message: '*Fill in correct credentials' });
+        req.session.message = "Please fill in credentials"
+        console.log(req.session.message);
+        res.render('login', {
+            message: req.session.message,
+            csslink: '../stylesheets/login.css',
+            jslink: '../javascripts/login.js',
+        });
     } else {
         res.cookie('isLogged', true)
         res.redirect('/interface')

@@ -1,10 +1,10 @@
 const express = require('express');
-const coockie = require('cookie-parser')
+// const coockie = require('cookie-parser')
 const { send } = require('process');
-const app = require('../app').default;
+const app = require('../app');
 const session = require('express-session')
 const { json } = require('express');
-const { redirect } = require('express/lib/response');
+// const { redirect } = require('express/lib/response');
 const { error } = require('console');
 const req = require('express/lib/request');
 
@@ -57,7 +57,13 @@ routerIndex.get('/interface', function(req, res, next) {
     console.log(req.sessionID);
     console.log(req.session.user);
     if (!req.session.user) {
-        res.render('login', { message: '*Fill in correct credentials' });
+        req.session.message = "Fill in credentials"
+        console.log(req.session.message);
+        res.render('login', {
+            message: req.session.message,
+            csslink: '../stylesheets/login.css',
+            jslink: '../javascripts/login.js',
+        });
     } else {
         const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`, (err, rows) => {
 
@@ -123,14 +129,16 @@ routerIndex.post('/register', async function(req, res, next) {
             console.log('unique constraint error');
             res.setHeader('content-type', 'text/html')
                 // res.render('login', { message: "Email already exists" })
+            req.session.message = "Email is already exist"
+            console.log(req.session.message);
             res.redirect('/')
         }
     });
-    console.log('im in register func');
-    console.log(req.body);
-    res.redirect('/interface')
-        // res.render('login', { message: "email already exist" })
-        // res.render('login', { message: '<p style="color:blue">Thank you for registering</p>' })
+    // console.log('im in register func');
+    // console.log(req.body);
+    // res.redirect('/interface')
+    // res.render('login', { message: "email already exist" })
+    // res.render('login', { message: '<p style="color:blue">Thank you for registering</p>' })
 })
 
 routerIndex.get('/logout', (req, res, next) => {
