@@ -1,3 +1,5 @@
+'use strict';
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -8,7 +10,6 @@ var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 const passport = require('passport')
-
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -55,8 +56,8 @@ const validation = (req, res, next) => {
     }
     // users = []
 
-app.use('/', indexRouter)
-app.use('/login', loginRouter)
+app.use('/', indexRouter);
+app.use('/login', loginRouter);
 
 app.get('/', function(req, res, next) {
     if (req.session.user) {

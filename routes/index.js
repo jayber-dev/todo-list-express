@@ -1,7 +1,7 @@
 const express = require('express');
 const coockie = require('cookie-parser')
 const { send } = require('process');
-const app = require('../app');
+const app = require('../app').default;
 const session = require('express-session')
 const { json } = require('express');
 const { redirect } = require('express/lib/response');
@@ -15,7 +15,6 @@ const db = new sqlite3.Database('todo.db')
 
 // TODO: make a session
 // TODO: build SQL database
-// let varified = ""
 
 let users = []
 routerIndex.use(session({ secret: '1234', cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: true }))
@@ -115,35 +114,29 @@ routerIndex.post('/addItem', (req, res, next) => {
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
-routerIndex.post('/register', function(req, res, next) {
+routerIndex.post('/register', async function(req, res, next) {
 
     console.log(req.session.id)
-    try {
-        db.serialize(async() => {
-            try {
-                var stmt = db.prepare(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass]);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                stmt.run()
-                stmt.finalize()
-            }
-        })
-        console.log('im in register func');
-        console.log(req.body);
-        res.redirect('/')
-    } catch (err) {
-        console.log(err);
+
+    db.run(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass], (err, data) => {
+        if (err) {
+            console.log('unique constraint error');
+            res.setHeader('content-type', 'text/html')
+                // res.render('login', { message: "Email already exists" })
+            res.redirect('/')
+        }
+    });
+    console.log('im in register func');
+    console.log(req.body);
+    res.redirect('/interface')
         // res.render('login', { message: "email already exist" })
-    }
-
-
-    // res.render('login', { message: '<p style="color:blue">Thank you for registering</p>' })
+        // res.render('login', { message: '<p style="color:blue">Thank you for registering</p>' })
 })
 
 routerIndex.get('/logout', (req, res, next) => {
     req.session.user = ""
     res.redirect('/')
 })
+
 
 module.exports = routerIndex;

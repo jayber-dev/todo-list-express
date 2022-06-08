@@ -1,4 +1,5 @@
 {
+    "type": "commonjs",
     "name": "node-try-todo-list",
     "version": "0.0.0",
     "private": true,
@@ -18,5 +19,8 @@
         "passport": "^0.6.0",
         "pug": "^3.0.2",
         "sqlite3": "^5.0.8"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.13"
     }
 }
