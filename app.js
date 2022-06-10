@@ -8,6 +8,23 @@ var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 
+const mysql = require('mysql')
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'Pp304682685!',
+    database: 'mysql',
+})
+
+connection.connect()
+
+connection.query('SELECT * FROM todo', (err, rows) => {
+    if (err) {
+        console.log(err);
+    }
+    console.log(rows);
+})
+
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
