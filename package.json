@@ -7,6 +7,7 @@
         "start": "nodemon ./bin/www"
     },
     "dependencies": {
+        "bcrypt": "^5.0.1",
         "cookie-parser": "~1.4.4",
         "debug": "~2.6.9",
         "edit-json-file": "^1.7.0",
@@ -17,6 +18,7 @@
         "mongoose": "^5.11.15",
         "morgan": "~1.9.1",
         "mysql": "^2.18.1",
+        "mysql2": "^2.3.3",
         "passport": "^0.6.0",
         "pug": "^3.0.2",
         "sqlite3": "^5.0.8"

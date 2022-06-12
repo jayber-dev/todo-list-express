@@ -15,7 +15,7 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
     const clearInput = document.getElementById('iteminput')
     if (e.key == "Enter") {
         let itemIdString = "";
-        itemIdString = String(itemIdString += Math.random() * 90)
+        itemIdString = String(itemIdString += Math.floor(Math.random() * 100000000))
         const user_id = document.getElementsByClassName('header')
         let userValue = e.target.value
         const req = new XMLHttpRequest();

@@ -7,24 +7,19 @@ const session = require('express-session')
 var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
+const bcrypt = require('bcrypt')
 
-const mysql = require('mysql')
+
+const mysql = require('mysql2')
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Pp304682685!',
-    database: 'mysql',
+    port: '4306',
+    password: '',
+    database: 'todo',
 })
 
 connection.connect()
-
-connection.query('SELECT * FROM todo', (err, rows) => {
-    if (err) {
-        console.log(err);
-    }
-    console.log(rows);
-})
-
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -43,14 +38,24 @@ app.use('/pics', express.static('public'))
 
 const validation = (req, res, next) => {
         req.user_logged = true
+
         if (req.body.email !== '' || req.body.pass !== '') {
             const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
+                console.log(data.hash_password);
                 if (err) {
                     console.log(err);
                     res.sendStatus(500);
                     return next();
                 }
-                if ('undefined' === typeof data) {
+                const passCheack = bcrypt.compare(req.body.pass, data.hash_password, function(err, result) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log(result);
+                });
+
+                console.log(passCheack);
+                if ('undefined' === typeof data.hash_password) {
                     req.user_logged = false;
                     return next()
                 } else if (req.body.pass == data.hash_password) {

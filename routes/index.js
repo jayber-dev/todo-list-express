@@ -7,14 +7,21 @@ const { json } = require('express');
 // const { redirect } = require('express/lib/response');
 const { error } = require('console');
 const req = require('express/lib/request');
-
+const mysql = require('mysql2');
+const res = require('express/lib/response');
+const { sendStatus } = require('express/lib/response');
+const bcrypt = require('bcrypt');
 // const { router } = require('../app');
 const routerIndex = express.Router();
-const sqlite3 = require('sqlite3').verbose()
-const db = new sqlite3.Database('todo.db')
 
-// TODO: make a session
-// TODO: build SQL database
+// TODO: build MYSQL database
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    port: '4306',
+    password: '',
+    database: 'todo',
+})
 
 let users = []
 routerIndex.use(session({ secret: '1234', cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: true }))
@@ -24,7 +31,7 @@ routerIndex.use(session({ secret: '1234', cookie: { maxAge: 10 * 900000 }, resav
 const validation = (req, res, next) => {
     req.user_logged = true
     if (req.body.email !== '' || req.body.pass !== '') {
-        const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
+        connection.query(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
             if (err) {
                 console.log(err);
                 res.sendStatus(500);
@@ -65,7 +72,7 @@ routerIndex.get('/interface', function(req, res, next) {
             jslink: '../javascripts/login.js',
         });
     } else {
-        const sql = db.all(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`, (err, rows) => {
+        connection.query(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`, (err, rows) => {
 
             if (err) {
                 throw err
@@ -85,60 +92,60 @@ routerIndex.get('/interface', function(req, res, next) {
 routerIndex.post("/priority", (req, res, next) => {
     console.log(req.body);
     res.sendStatus(200)
-    db.run(`UPDATE todo
-            SET priority = ?
-            WHERE itemId = ?`,
-        req.body.priority, req.body.itemId)
+    connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId])
 })
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 routerIndex.post('/handle', (req, res, next) => {
     console.log(req.session.id)
+    console.log(req.body.itemId);
+    // res.sendStatus(200)
+    let sql = 'DELETE FROM `todo` WHERE itemId = ?'
+    console.log('im in delete method');
+    connection.query(sql, [req.body.itemId], err => {
+            if (err) { console.log(err); } else { console.log('yes'); }
+        })
+        // connection.query('DELETE FROM `todo` WHERE itemId = ?', [req.body.itemId], err => {
+        //     if (err) { console.log(err); } else { console.log('yes'); }
+        // })
     res.sendStatus(200)
-    db.run(`DELETE FROM todo 
-            WHERE itemId = ?`,
-        req.body.itemId)
 })
 
-// ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ----------------
+
+// ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ---------------- WORK
 routerIndex.post('/addItem', (req, res, next) => {
-    console.log(req.session.id)
-    console.log(req.body.itemId);
-    console.log("im inside the additem")
-    db.serialize(() => {
-        const stmt = db.prepare(`INSERT INTO todo
-                                 (itemId, task, priority, user_id) 
-                                 VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
-            //  req.body.user_id
-            // ${req.body.content}', 1, ${req.session.user['userId']}
-        stmt.run()
-        stmt.finalize()
-        res.sendStatus(200)
-    })
+
+    connection.query(`INSERT INTO todo
+                 (itemId, task, priority, user_id) 
+                 VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
+
+    res.sendStatus(200)
+
 })
 
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
 routerIndex.post('/register', async function(req, res, next) {
-
-    console.log(req.session.id)
-
-    db.run(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass], (err, data) => {
-        if (err) {
-            console.log('unique constraint error');
-            res.setHeader('content-type', 'text/html')
-                // res.render('login', { message: "Email already exists" })
-            req.session.message = "Email is already exist"
-            console.log(req.session.message);
-            res.redirect('/')
-        }
+    const saltRounds = 10;
+    console.log(req.body.pass);
+    const myPlaintextPassword = req.body.pass;
+    bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+        if (err) { console.log(err + 'problem with hashing your password'); }
+        console.log(hash);
+        connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash], (err) => {
+            if (err) {
+                console.log('unique constraint error');
+                res.setHeader('content-type', 'text/html')
+                    // res.render('login', { message: "Email already exists" })
+                req.session.message = "Email is already exist"
+                console.log(req.session.message);
+                res.redirect('/')
+            }
+        });
     });
-    // console.log('im in register func');
-    // console.log(req.body);
-    // res.redirect('/interface')
-    // res.render('login', { message: "email already exist" })
-    // res.render('login', { message: '<p style="color:blue">Thank you for registering</p>' })
+
+    res.redirect('/')
 })
 
 routerIndex.get('/logout', (req, res, next) => {
