@@ -15,6 +15,7 @@ const bcrypt = require('bcrypt');
 const routerIndex = express.Router();
 
 // TODO: build MYSQL database
+//  TODO: handle password undefiend 
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -130,19 +131,19 @@ routerIndex.post('/register', async function(req, res, next) {
     const saltRounds = 10;
     console.log(req.body.pass);
     const myPlaintextPassword = req.body.pass;
-    bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-        if (err) { console.log(err + 'problem with hashing your password'); }
-        console.log(hash);
-        connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash], (err) => {
-            if (err) {
-                console.log('unique constraint error');
-                res.setHeader('content-type', 'text/html')
-                    // res.render('login', { message: "Email already exists" })
-                req.session.message = "Email is already exist"
-                console.log(req.session.message);
-                res.redirect('/')
-            }
-        });
+    // bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+    //     if (err) { console.log(err + 'problem with hashing your password'); }
+    //     console.log(hash);
+    connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, req.body.pass], (err) => {
+        if (err) {
+            console.log('unique constraint error');
+            res.setHeader('content-type', 'text/html')
+                // res.render('login', { message: "Email already exists" })
+            req.session.message = "Email is already exist"
+            console.log(req.session.message);
+            res.redirect('/')
+        }
+        // });
     });
 
     res.redirect('/')

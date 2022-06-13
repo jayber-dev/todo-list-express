@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt')
 
 
 const mysql = require('mysql2')
+
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -19,7 +20,6 @@ const connection = mysql.createConnection({
     database: 'todo',
 })
 
-connection.connect()
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -35,34 +35,53 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/pics', express.static('public'))
 
+const test = (req, res, next) => {
+    const sql = `SELECT * FROM users WHERE email = ?`
+    const rows = connection.query(sql, [req.body.email], (err, rows) => {
+        if (err) { console.log(err); }
+        const result = bcrypt.compare(req.body.pass, rows[0].hash_password)
+        console.log(result.then(() => {
+            if (result) {
+                console.log('im true');
+            }
+        }));
+        const loggedUser = { userId: rows[0].id, email: rows[0].email, fname: rows[0].fname, lname: rows[0].lname, isLogged: true }
+            // users.push(loggedUser)
+        req.session.user = loggedUser
+        return req.user_id = rows[0].id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = rows.id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
+    })
+    console.log(rows);
+}
 
-const validation = (req, res, next) => {
+const validation = function(req, res, next) {
         req.user_logged = true
-
+        console.log(req.body)
+        const sql = `SELECT * FROM users WHERE email = ?`
         if (req.body.email !== '' || req.body.pass !== '') {
-            const dbData = db.get(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-                console.log(data.hash_password);
+            connection.query(sql, req.body.email, function(err, rows, fields) {
                 if (err) {
                     console.log(err);
                     res.sendStatus(500);
                     return next();
                 }
-                const passCheack = bcrypt.compare(req.body.pass, data.hash_password, function(err, result) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    console.log(result);
-                });
 
-                console.log(passCheack);
-                if ('undefined' === typeof data.hash_password) {
+                if (typeof rows[0].hash_password == 'undefined') {
                     req.user_logged = false;
                     return next()
-                } else if (req.body.pass == data.hash_password) {
-                    const loggedUser = { userId: data.id, email: data.email, fname: data.fname, lname: data.lname, isLogged: true }
-                        // users.push(loggedUser)
-                    req.session.user = loggedUser
-                    return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = data.id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
+
+                } else if (req.body.pass !== "") {
+                    const wow = bcrypt.compare(req.body.pass, rows[0].hash_password).then((wow) => {
+                        if (wow) {
+                            console.log('got to wow == true');
+                            const loggedUser = { userId: rows[0].id, email: rows[0].email, fname: rows[0].fname, lname: rows[0].lname, isLogged: true }
+                                // users.push(loggedUser)
+                            req.session.user = loggedUser
+                            return req.user_id = rows[0].id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = rows.id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
+                        } else {
+                            return req.user_logged = false, next()
+                        }
+                    })
+
                 } else {
                     req.user_logged = false;
                     next()
@@ -91,7 +110,9 @@ app.get('/', function(req, res, next) {
 });
 
 app.post('/', validation, function(req, res) {
+    console.log('back in  / function');
     if (!req.user_logged) {
+        console.log('validatin refused');
         req.session.message = "Please fill in credentials"
         console.log(req.session.message);
         res.render('login', {
@@ -99,6 +120,7 @@ app.post('/', validation, function(req, res) {
             csslink: '../stylesheets/login.css',
             jslink: '../javascripts/login.js',
         });
+
     } else {
         res.cookie('isLogged', true)
         res.redirect('/interface')
