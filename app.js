@@ -65,10 +65,9 @@ const validation = function(req, res, next) {
                     return next();
                 }
 
-                if (typeof rows[0].hash_password == 'undefined') {
+                if (typeof rows[0] == 'undefined') {
                     req.user_logged = false;
                     return next()
-
                 } else if (req.body.pass !== "") {
                     const wow = bcrypt.compare(req.body.pass, rows[0].hash_password).then((wow) => {
                         if (wow) {

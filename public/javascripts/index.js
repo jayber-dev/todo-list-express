@@ -1,4 +1,19 @@
 const removeElem = document.querySelectorAll('.del-item')
+const addItem = document.querySelector('.color-high')
+const clearInput = document.getElementById('iteminput')
+const user_id = document.getElementsByClassName('header')
+const dragItemElems = document.querySelectorAll('.drag');
+const dropContainerElem = document.querySelectorAll('.drop-box')
+
+function readPageElements() {
+    removeElem = document.querySelectorAll('.del-item')
+    addItem = document.querySelector('.color-high')
+    clearInput = document.getElementById('iteminput')
+    user_id = document.getElementsByClassName('header')
+    dragItemElems = document.querySelectorAll('.drag');
+    dropContainerElem = document.querySelectorAll('.drop-box')
+
+}
 
 // ------------------- REMOVE ITEMS FROM TODO LIST -----------------------------
 function removeItem(e, itemData) {
@@ -11,29 +26,26 @@ function removeItem(e, itemData) {
 
 // ------------------ ADD ITEM TO LIST ---------------------------------------
 document.getElementById('iteminput').addEventListener('keyup', (e) => {
-    const addItem = document.querySelector('.color-high')
-    const clearInput = document.getElementById('iteminput')
+
     if (e.key == "Enter") {
         let itemIdString = "";
-        itemIdString = String(itemIdString += Math.floor(Math.random() * 100000000))
-        const user_id = document.getElementsByClassName('header')
+        itemIdString = String(itemIdString += Math.floor(Math.random() * 100000000000))
         let userValue = e.target.value
         const req = new XMLHttpRequest();
         req.open("post", "/addItem", true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.send(body = `itemId=${itemIdString}&content=${userValue}&priority=${e.target.high = 1}&user_id=${user_id[0].getAttribute('data')}`)
-            // document.location.reload(true)
         addItem.innerHTML += `<div class="container-high drag" draggable="true">
                                   <p class="todo-item">${e.target.value}</p>
                                   <p class="del-item" id="${itemIdString}" onclick="removeItem(event,this)">x</p>
                                    </div>`
         clearInput.value = ""
+        document.location.reload(true)
     }
 })
 
 // ------------------ DRAG AND DROP HANDLER ----------------------------------
-const dragItemElems = document.querySelectorAll('.drag');
-const dropContainerElem = document.querySelectorAll('.drop-box')
+
 let dragDataElem
 let targetElem
 
@@ -70,7 +82,7 @@ dragItemElems.forEach(() => {
 
 dropContainerElem.forEach(() => {
     addEventListener('dragover', (e) => {
-        e.stopImmediatePropagation()
+        // e.stopImmediatePropagation()
         e.dataTransfer.dropEffect = 'move';
         e.preventDefault();
         if (e.target.className == "container-low drop-box" || e.target.className == "todo-item dummy-item") {
