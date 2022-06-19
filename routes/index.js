@@ -41,12 +41,12 @@ const validation = (req, res, next) => {
                 return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 0), httpOnly: true }), next();
             } else {
                 req.user_logged = false;
-                next()
+                next();
             }
         })
     } else {
         req.user_logged = false;
-        next()
+        next();
     }
 
 }
@@ -56,7 +56,7 @@ const validation = (req, res, next) => {
 
 routerIndex.get('/interface', function(req, res, next) {
     if (!req.session.user) {
-        req.session.message = "Fill in credentials"
+        req.session.message = "Fill in credentials";
         res.render('login', {
             message: req.session.message,
             csslink: '../stylesheets/login.css',
@@ -66,7 +66,7 @@ routerIndex.get('/interface', function(req, res, next) {
         connection.query(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`, (err, rows) => {
 
             if (err) {
-                throw err
+                throw err;
             }
             res.render('index', {
                 title: "Manage your tasks",
@@ -81,19 +81,19 @@ routerIndex.get('/interface', function(req, res, next) {
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
 routerIndex.post("/priority", (req, res, next) => {
-    res.sendStatus(200)
-    connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId])
+    res.sendStatus(200);
+    connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId]);
 })
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 routerIndex.post('/handle', (req, res, next) => {
 
-    let sql = 'DELETE FROM `todo` WHERE itemId = ?'
+    let sql = 'DELETE FROM `todo` WHERE itemId = ?';
     console.log('im in delete method');
     connection.query(sql, [req.body.itemId], err => {
         if (err) { console.log(err); } else { console.log('yes'); }
     })
-    res.sendStatus(200)
+    res.sendStatus(200);
 })
 
 
@@ -103,7 +103,7 @@ routerIndex.post('/addItem', (req, res, next) => {
     connection.query(`INSERT INTO todo
                  (itemId, task, priority, user_id) 
                  VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
-    res.sendStatus(200)
+    res.sendStatus(200);
 })
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
