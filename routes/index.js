@@ -10,13 +10,14 @@ const routerIndex = express.Router();
 let users = []
 
 const connection = mysql.createConnection({
-    host: '31.170.164.54',
-    user: 'u889934763_jayber1',
-    port: '3306',
-    password: '1&o+b;FnZ>kL',
-    database: 'information_schema',
+    host: process.env.HOST,
+    user: process.env.USER,
+    port: process.env.POST,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
+    connectTimeout: 10000000,
+    insecureAuth: true,
 })
-
 
 routerIndex.use(session({ secret: `${process.env.SECRET_KEY}`, cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: true }));
 
