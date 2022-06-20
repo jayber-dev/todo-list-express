@@ -1,6 +1,6 @@
 {
     "type": "commonjs",
-    "name": "node-try-todo-list",
+    "name": "express-todo-list",
     "version": "0.0.0",
     "private": true,
     "scripts": {

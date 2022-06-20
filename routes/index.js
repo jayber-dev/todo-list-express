@@ -10,11 +10,11 @@ const routerIndex = express.Router();
 let users = []
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    port: '4306',
-    password: '',
-    database: 'todo',
+    host: '31.170.164.54',
+    user: 'u889934763_jayber1',
+    port: '3306',
+    password: '1&o+b;FnZ>kL',
+    database: 'information_schema',
 })
 
 
