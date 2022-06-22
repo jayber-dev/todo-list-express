@@ -2,7 +2,7 @@ const express = require('express');
 const app = require('../app');
 const session = require('express-session')
 const req = require('express/lib/request');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const res = require('express/lib/response');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
@@ -12,10 +12,10 @@ let users = []
 const connection = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.USER,
-    port: process.env.POST,
+    port: process.env.PORT,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    connectTimeout: 10000000,
+    connectTimeout: 0,
     insecureAuth: true,
 })
 
@@ -26,24 +26,36 @@ routerIndex.use(session({ secret: `${process.env.SECRET_KEY}`, cookie: { maxAge:
 const validation = (req, res, next) => {
     req.user_logged = true;
     if (req.body.email !== '' || req.body.pass !== '') {
-        connection.query(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], function(err, data) {
-            if (err) {
+        const connection = mysql.createConnection({
+            host: process.env.HOST,
+            user: process.env.USER,
+            port: process.env.PORT,
+            password: process.env.PASSWORD,
+            database: process.env.DATABASE,
+            connectTimeout: 0,
+            insecureAuth: true,
+        }).then((connection) => {
+            connection.query(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], (connection) => {
+                if (err) {
+                    console.log(err);
+                    res.sendStatus(500);
+                    return next();
+                }
+                if ('undefined' === typeof data) {
+                    req.user_logged = false;
+                    return next()
+                } else if (req.body.pass == data.hash_password) {
+                    const loggedUser = { userId: data.id, email: data.email, fname: data.fname, lname: data.lname };
+                    users.push(loggedUser);
+                    req.session.user = loggedUser;
+                    return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 0), httpOnly: true }), next();
+                } else {
+                    req.user_logged = false;
+                    next();
+                }
+            }).catch((err) => {
                 console.log(err);
-                res.sendStatus(500);
-                return next();
-            }
-            if ('undefined' === typeof data) {
-                req.user_logged = false;
-                return next()
-            } else if (req.body.pass == data.hash_password) {
-                const loggedUser = { userId: data.id, email: data.email, fname: data.fname, lname: data.lname };
-                users.push(loggedUser);
-                req.session.user = loggedUser;
-                return req.user_id = data.id, req.user_logged = true, req.session.user, res.cookie(`user_id`, `${req.user_id = data.id}`, { expires: new Date(Date.now() + 0), httpOnly: true }), next();
-            } else {
-                req.user_logged = false;
-                next();
-            }
+            })
         })
     } else {
         req.user_logged = false;
@@ -57,33 +69,53 @@ const validation = (req, res, next) => {
 
 routerIndex.get('/interface', function(req, res, next) {
     if (!req.session.user) {
-        req.session.message = "Fill in credentials";
+        req.session.message = "Fill in valid credentials";
         res.render('login', {
             message: req.session.message,
             csslink: '../stylesheets/login.css',
             jslink: '../javascripts/login.js',
         });
     } else {
-        connection.query(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`, (err, rows) => {
-
-            if (err) {
-                throw err;
-            }
-            res.render('index', {
-                title: "Manage your tasks",
-                toList: rows,
-                user_id: req.user_id,
-                csslink: '../stylesheets/style.css',
-                jslink: '/javascripts/index.js'
+        const connection = mysql.createConnection({
+            host: process.env.HOST,
+            user: process.env.USER,
+            port: process.env.PORT,
+            password: process.env.PASSWORD,
+            database: process.env.DATABASE,
+            connectTimeout: 0,
+            insecureAuth: true,
+        }).then((connection) => {
+            connection.query(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`).then((connection) => {
+                res.render('index', {
+                    title: "Manage your tasks",
+                    toList: connection[0],
+                    user_id: req.user_id,
+                    csslink: '../stylesheets/style.css',
+                    jslink: '/javascripts/index.js'
+                });
+            }).catch((err) => {
+                console.log(err);
             });
         });
-    }
-})
+    };
+});
 
 // --------------------- POST FOR PRIORITY CHANGE ---------------------------------
 routerIndex.post("/priority", (req, res, next) => {
     res.sendStatus(200);
-    connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId]);
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        port: process.env.PORT,
+        password: process.env.PASSWORD,
+        database: process.env.DATABASE,
+        connectTimeout: 0,
+        insecureAuth: true,
+    }).then((connection) => {
+        connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId]).then((connection) => {
+            console.log(connection[0]);
+        })
+    });
 })
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
@@ -91,20 +123,41 @@ routerIndex.post('/handle', (req, res, next) => {
 
     let sql = 'DELETE FROM `todo` WHERE itemId = ?';
     console.log('im in delete method');
-    connection.query(sql, [req.body.itemId], err => {
-        if (err) { console.log(err); } else { console.log('yes'); }
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        port: process.env.PORT,
+        password: process.env.PASSWORD,
+        database: process.env.DATABASE,
+        connectTimeout: 0,
+        insecureAuth: true,
+    }).then((connection) => {
+        connection.query(sql, [req.body.itemId])
+        console.log(connection);
     })
+
     res.sendStatus(200);
 })
 
-
 // ------------------- POST METHOD FOR ADDING ITEMS TO LIST HANDLER ---------------- WORK
 routerIndex.post('/addItem', (req, res, next) => {
-
-    connection.query(`INSERT INTO todo
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        port: process.env.PORT,
+        password: process.env.PASSWORD,
+        database: process.env.DATABASE,
+        connectTimeout: 0,
+        insecureAuth: true,
+    }).then((connection) => {
+        console.log(req.body.itemId);
+        connection.query(`INSERT INTO todo
                  (itemId, task, priority, user_id) 
                  VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
-    res.sendStatus(200);
+    }).catch((err) => {
+        console.log(err);
+    })
+
 })
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
@@ -114,19 +167,30 @@ routerIndex.post('/register', async function(req, res, next) {
     const myPlaintextPassword = req.body.pass;
     bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
         if (err) { console.log(err + 'problem with hashing your password'); }
-        connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash], (err) => {
-            if (err) {
-                console.log('unique constraint error');
-                res.setHeader('content-type', 'text/html')
-                    // res.render('login', { message: "Email already exists" })
-                req.session.message = "Email is already exist"
-                res.redirect('/')
-            }
-        });
+        const connection = mysql.createConnection({
+            host: process.env.HOST,
+            user: process.env.USER,
+            port: process.env.PORT,
+            password: process.env.PASSWORD,
+            database: process.env.DATABASE,
+            connectTimeout: 0,
+            insecureAuth: true,
+        }).then((connection) => {
+            connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash])
+                .then((connection) => { console.log(connection[0]); })
+                .catch((err) => {
+                    if (err) {
+                        console.log('unique constraint error');
+                        res.setHeader('content-type', 'text/html');
+                        req.session.message = "Email is already exist";
+                        res.redirect('/');
+                    }
+                })
+        })
     });
+});
 
-    res.redirect('/')
-})
+// ------------------------------ LOGOUT HANDLER ------------------------------
 
 routerIndex.get('/logout', (req, res, next) => {
     req.session.user = ""

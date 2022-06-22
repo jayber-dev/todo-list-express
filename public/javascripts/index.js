@@ -29,7 +29,7 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
 
     if (e.key == "Enter") {
         let itemIdString = "";
-        itemIdString = String(itemIdString += Math.floor(Math.random() * 100000000000))
+        itemIdString = String(itemIdString += Math.floor(Math.random() * 1000000000))
         let userValue = e.target.value
         const req = new XMLHttpRequest();
         req.open("post", "/addItem", true);
@@ -40,7 +40,7 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
                                   <p class="del-item" id="${itemIdString}" onclick="removeItem(event,this)">x</p>
                                    </div>`
         clearInput.value = ""
-        document.location.reload(true)
+            // document.location.reload(true)
     }
 })
 

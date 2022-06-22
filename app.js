@@ -10,7 +10,7 @@ const db = new sqlite3.Database('todo.db')
 const bcrypt = require('bcrypt')
 
 
-const mysql = require('mysql2')
+const mysql = require('mysql2/promise')
 
 const connection = mysql.createConnection({
     host: process.env.HOST,
@@ -37,64 +37,51 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/pics', express.static('public'))
 
-const test = (req, res, next) => {
-    const sql = `SELECT * FROM users WHERE email = ?`
-    const rows = connection.query(sql, [req.body.email], (err, rows) => {
-        if (err) { console.log(err); }
-        const result = bcrypt.compare(req.body.pass, rows[0].hash_password)
-        console.log(result.then(() => {
-            if (result) {
-                console.log('im true');
-            }
-        }));
-        const loggedUser = { userId: rows[0].id, email: rows[0].email, fname: rows[0].fname, lname: rows[0].lname, isLogged: true }
-            // users.push(loggedUser)
-        req.session.user = loggedUser
-        return req.user_id = rows[0].id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = rows.id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
-    })
-    console.log(rows);
-}
 
 const validation = function(req, res, next) {
-        req.user_logged = true
-        console.log(req.body)
-        const sql = `SELECT * FROM users WHERE email = ?`
-        if (req.body.email !== '' || req.body.pass !== '') {
-            connection.query(sql, req.body.email, function(err, rows, fields) {
-                if (err) {
-                    console.log(err);
-                    res.sendStatus(500);
-                    return next();
-                }
-
-                if (typeof rows[0] == 'undefined') {
+    req.user_logged = true
+    console.log(req.body)
+    const sql = `SELECT * FROM users WHERE email = ?`
+    if (req.body.email !== '' || req.body.pass !== '') {
+        const connection = mysql.createConnection({
+            host: process.env.HOST,
+            user: process.env.USER,
+            port: process.env.PORT,
+            password: process.env.PASSWORD,
+            database: process.env.DATABASE,
+            connectTimeout: 0,
+            insecureAuth: true,
+        }).then((connection) => {
+            connection.query(sql, req.body.email).then((connection) => {
+                console.log(connection[0][0]);
+                if (typeof connection[0][0] == 'undefined') {
                     req.user_logged = false;
                     return next()
                 } else if (req.body.pass !== "") {
-                    const wow = bcrypt.compare(req.body.pass, rows[0].hash_password).then((wow) => {
+                    const wow = bcrypt.compare(req.body.pass, connection[0][0].hash_password).then((wow) => {
                         if (wow) {
                             console.log('got to wow == true');
-                            const loggedUser = { userId: rows[0].id, email: rows[0].email, fname: rows[0].fname, lname: rows[0].lname, isLogged: true }
+                            const loggedUser = { userId: connection[0][0].id, email: connection[0][0].email, fname: connection[0][0].fname, lname: connection[0][0].lname, isLogged: true }
                                 // users.push(loggedUser)
                             req.session.user = loggedUser
-                            return req.user_id = rows[0].id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = rows.id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
+                            return req.user_id = connection[0][0].id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = connection[0][0].id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
                         } else {
-                            return req.user_logged = false, next()
-                        }
-                    })
-
+                            return req.user_logged = false, next();
+                        };
+                    });
                 } else {
                     req.user_logged = false;
-                    next()
-                }
-            })
-        } else {
-            req.user_logged = false;
-            next()
-        }
+                    next();
+                };
+            });
+        });
 
-    }
-    // users = []
+    } else {
+        req.user_logged = false;
+        next()
+    };
+
+};
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
