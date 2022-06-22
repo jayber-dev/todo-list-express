@@ -5,11 +5,12 @@ const req = require('express/lib/request');
 const mysql = require('mysql2/promise');
 const res = require('express/lib/response');
 // const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const routerIndex = express.Router();
 let users = []
 
-const bcrypt = dcodeIO.bcrypt;
+// const bcrypt = dcodeIO.bcrypt;
 routerIndex.use(session({ secret: `${process.env.SECRET_KEY}`, cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: true }));
 
 // ------------------------ LOGIN HANDLER FUNCTION----------------------------------

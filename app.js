@@ -8,8 +8,9 @@ var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
     // const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
-const bcrypt = dcodeIO.bcrypt;
+// const bcrypt = dcodeIO.bcrypt;
 
 const mysql = require('mysql2/promise')
 
@@ -29,7 +30,7 @@ const mysql = require('mysql2/promise')
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const { redirect } = require('express/lib/response');
-const mysql2Promise = require('mysql2-promise');
+// const mysql2Promise = require('mysql2-promise');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
