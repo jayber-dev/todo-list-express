@@ -9,16 +9,7 @@ require('dotenv').config();
 const routerIndex = express.Router();
 let users = []
 
-const connection = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    port: process.env.PORT,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    connectTimeout: 0,
-    insecureAuth: true,
-})
-
+const bcrypt = dcodeIO.bcrypt;
 routerIndex.use(session({ secret: `${process.env.SECRET_KEY}`, cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: true }));
 
 // ------------------------ LOGIN HANDLER FUNCTION----------------------------------

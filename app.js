@@ -8,25 +8,28 @@ var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
 const bcrypt = require('bcrypt')
-
+require('dotenv').config();
+const bcrypt = dcodeIO.bcrypt;
 
 const mysql = require('mysql2/promise')
 
-const connection = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    port: process.env.PORT,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    connectTimeout: 10000000,
-    insecureAuth: true,
-})
-
+// const conn = mysql.createConnection({
+//     host: process.env.HOST,
+//     user: process.env.USER,
+//     database: process.env.DATABASE,
+//     password: process.env.PASSWORD,
+// }).then((conn) => {
+//     conn.query("SELECT * FROM todo").then((conn) => {
+//         console.log(conn[0]);
+//     }).catch((err) => {
+//         console.log(err);
+//     });
+// })
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const { redirect } = require('express/lib/response');
-
+const mysql2Promise = require('mysql2-promise');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
