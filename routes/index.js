@@ -4,7 +4,7 @@ const session = require('express-session')
 const req = require('express/lib/request');
 const mysql = require('mysql2/promise');
 const res = require('express/lib/response');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 require('dotenv').config();
 const routerIndex = express.Router();
 let users = []

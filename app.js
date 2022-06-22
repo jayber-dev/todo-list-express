@@ -7,7 +7,7 @@ const session = require('express-session')
 var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
-const bcrypt = require('bcrypt')
+    // const bcrypt = require('bcrypt')
 require('dotenv').config();
 const bcrypt = dcodeIO.bcrypt;
 
