@@ -115,7 +115,9 @@ app.post('/', validation, function(req, res) {
         });
 
     } else {
-        res.sendStatus(200)
+        req.setTimeout(1000, (err) => {
+            if (err) console.log(err);
+        })
         res.cookie('isLogged', true)
         res.redirect('/interface')
     }
