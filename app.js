@@ -92,6 +92,7 @@ app.use('/login', loginRouter);
 
 app.get('/', function(req, res, next) {
     if (req.session.user) {
+        res.sendStatus(200)
         res.redirect('/interface')
     }
     res.render('login', {
@@ -114,6 +115,7 @@ app.post('/', validation, function(req, res) {
         });
 
     } else {
+        res.sendStatus(200)
         res.cookie('isLogged', true)
         res.redirect('/interface')
     }
