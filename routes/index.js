@@ -5,6 +5,7 @@ const req = require('express/lib/request');
 const mysql = require('mysql2/promise');
 const res = require('express/lib/response');
 const bcrypt = require('bcryptjs');
+const { redirect } = require('express/lib/response');
 require('dotenv').config();
 const routerIndex = express.Router();
 let users = []
@@ -116,7 +117,7 @@ routerIndex.post("/priority", (req, res, next) => {
 
 // -------------------- POST METHOD DELETE LIST ITEM HANDLER -----------------------
 routerIndex.post('/handle', (req, res, next) => {
-
+    console.log(req.body);
     let sql = 'DELETE FROM `todo` WHERE itemId = ?';
     const connection = mysql.createConnection({
         host: process.env.HOST,
@@ -127,8 +128,8 @@ routerIndex.post('/handle', (req, res, next) => {
         connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
-        connection.query(sql, [req.body.itemId]).then((connection) => {
-            console.log(`log deleted ${connection[0]}`);
+        connection.query('DELETE FROM `todo` WHERE itemId = ?', [req.body.itemId]).then((connection) => {
+            console.log(`log deleted ${connection}`);
         })
         connection.end()
     })
@@ -162,7 +163,10 @@ routerIndex.post('/register', async function(req, res, next) {
     const saltRounds = 10;
     const myPlaintextPassword = req.body.pass;
     bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-        if (err) { console.log(err + 'problem with hashing your password'); }
+        if (err) {
+            console.log(err + 'problem with hashing your password')
+            res.redirect('/');
+        }
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
@@ -175,7 +179,7 @@ routerIndex.post('/register', async function(req, res, next) {
             connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash])
                 .then((connection) => {
                     res.redirect('/')
-                    console.log(connection[0]);
+
                 })
                 .catch((err) => {
                     if (err) {
