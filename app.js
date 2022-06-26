@@ -7,30 +7,16 @@ const session = require('cookie-session')
 var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('todo.db')
-    // const bcrypt = require('bcrypt')
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
-// const bcrypt = dcodeIO.bcrypt;
+
 
 const mysql = require('mysql2/promise')
-
-// const conn = mysql.createConnection({
-//     host: process.env.HOST,
-//     user: process.env.USER,
-//     database: process.env.DATABASE,
-//     password: process.env.PASSWORD,
-// }).then((conn) => {
-//     conn.query("SELECT * FROM todo").then((conn) => {
-//         console.log(conn[0]);
-//     }).catch((err) => {
-//         console.log(err);
-//     });
-// })
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const { redirect } = require('express/lib/response');
-// const mysql2Promise = require('mysql2-promise');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,13 +30,11 @@ app.use('/pics', express.static('public'))
 
 const validation = function(req, res, next) {
     req.user_logged = true
-    console.log(req.body)
     const sql = `SELECT * FROM users WHERE email = ?`
     if (req.body.email !== '' || req.body.pass !== '') {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
-            // port: process.env.PORT,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             connectTimeout: 0,
@@ -66,7 +50,6 @@ const validation = function(req, res, next) {
                         if (wow) {
                             console.log('got to wow == true');
                             const loggedUser = { userId: connection[0][0].id, email: connection[0][0].email, fname: connection[0][0].fname, lname: connection[0][0].lname, isLogged: true }
-                                // users.push(loggedUser)
                             req.session.user = loggedUser
                             return req.user_id = connection[0][0].id, req.user_logged = true, req.session.user, res.cookie(`userId`, `${req.user_id = connection[0][0].id}`, 'isLogged', 'true', { expires: new Date(Date.now() + 60000), httpOnly: true }), next()
                         } else {
@@ -103,11 +86,10 @@ app.get('/', function(req, res, next) {
 });
 
 app.post('/', validation, function(req, res) {
-    console.log('back in  / function');
+
     if (!req.user_logged) {
         console.log('validatin refused');
         req.session.message = "Please fill in credentials"
-        console.log(req.session.message);
         res.render('login', {
             message: req.session.message,
             csslink: '../stylesheets/login.css',

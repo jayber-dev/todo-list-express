@@ -1,16 +1,15 @@
 const express = require('express');
 const app = require('../app');
-const session = require('express-session')
+const session = require('cookie-session')
 const req = require('express/lib/request');
 const mysql = require('mysql2/promise');
 const res = require('express/lib/response');
-// const bcrypt = require('bcrypt');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const routerIndex = express.Router();
 let users = []
 
-// const bcrypt = dcodeIO.bcrypt;
+
 routerIndex.use(session({ secret: `${process.env.SECRET_KEY}`, cookie: { maxAge: 10 * 900000 }, resave: false, saveUninitialized: false }));
 
 // ------------------------ LOGIN HANDLER FUNCTION----------------------------------
@@ -21,7 +20,7 @@ const validation = (req, res, next) => {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
-            // port: process.env.PORT,
+
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             connectTimeout: 0,
@@ -71,7 +70,6 @@ routerIndex.get('/interface', function(req, res, next) {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
-            // port: process.env.PORT,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             connectTimeout: 0,
@@ -98,14 +96,13 @@ routerIndex.post("/priority", (req, res, next) => {
     const connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
-        // port: process.env.PORT,
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
         connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
         connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId]).then((connection) => {
-            console.log(connection[0]);
+
         })
     });
 })
@@ -114,7 +111,6 @@ routerIndex.post("/priority", (req, res, next) => {
 routerIndex.post('/handle', (req, res, next) => {
 
     let sql = 'DELETE FROM `todo` WHERE itemId = ?';
-    console.log('im in delete method');
     const connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
@@ -125,7 +121,6 @@ routerIndex.post('/handle', (req, res, next) => {
         insecureAuth: true,
     }).then((connection) => {
         connection.query(sql, [req.body.itemId])
-        console.log(connection);
     })
 
     res.sendStatus(200);
@@ -142,7 +137,6 @@ routerIndex.post('/addItem', (req, res, next) => {
         connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
-        console.log(req.body.itemId);
         connection.query(`INSERT INTO todo
                  (itemId, task, priority, user_id) 
                  VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
