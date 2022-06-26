@@ -31,7 +31,7 @@ const validation = (req, res, next) => {
 
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
-            connectTimeout: 0,
+            // connectTimeout: 0,
             insecureAuth: true,
         }).then((connection) => {
             connection.query(`SELECT id, email, hash_password, fname, lname From users WHERE email = ?`, [req.body.email], (connection) => {
@@ -80,7 +80,7 @@ routerIndex.get('/interface', function(req, res, next) {
             user: process.env.USER,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
-            connectTimeout: 0,
+            // connectTimeout: 0,
             insecureAuth: true,
         }).then((connection) => {
             connection.query(`SELECT * FROM todo WHERE user_id = ${req.session.user['userId']}`).then((connection) => {
@@ -106,7 +106,7 @@ routerIndex.post("/priority", (req, res, next) => {
         user: process.env.USER,
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
-        connectTimeout: 0,
+        // connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
         connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId]).then((connection) => {
@@ -125,10 +125,12 @@ routerIndex.post('/handle', (req, res, next) => {
         port: process.env.PORT,
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
-        connectTimeout: 0,
+        // connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
-        connection.query(sql, [req.body.itemId])
+        connection.query(sql, [req.body.itemId]).then(connection => {
+            console.log("log deleted");
+        })
     })
 
     res.sendStatus(200);
@@ -142,7 +144,7 @@ routerIndex.post('/addItem', (req, res, next) => {
         // port: process.env.PORT,
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
-        connectTimeout: 0,
+        // connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
         connection.query(`INSERT INTO todo
@@ -164,10 +166,9 @@ routerIndex.post('/register', async function(req, res, next) {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
-            // port: process.env.PORT,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
-            connectTimeout: 0,
+            // connectTimeout: 0,
             insecureAuth: true,
         }).then((connection) => {
             connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash])
