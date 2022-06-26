@@ -173,7 +173,10 @@ routerIndex.post('/register', async function(req, res, next) {
             insecureAuth: true,
         }).then((connection) => {
             connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash])
-                .then((connection) => { console.log(connection[0]); })
+                .then((connection) => {
+                    res.redirect('/')
+                    console.log(connection[0]);
+                })
                 .catch((err) => {
                     if (err) {
                         console.log('unique constraint error');
@@ -185,7 +188,7 @@ routerIndex.post('/register', async function(req, res, next) {
             connection.end()
         })
     });
-    res.sendStatus(200)
+    // res.sendStatus(200)
 });
 
 // ------------------------------ LOGOUT HANDLER ------------------------------
