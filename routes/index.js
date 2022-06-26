@@ -185,6 +185,7 @@ routerIndex.post('/register', async function(req, res, next) {
             connection.end()
         })
     });
+    res.sendStatus(200)
 });
 
 // ------------------------------ LOGOUT HANDLER ------------------------------
