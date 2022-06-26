@@ -122,15 +122,15 @@ routerIndex.post('/handle', (req, res, next) => {
     const connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
-        port: process.env.PORT,
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
         connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
-        connection.query('DELETE FROM `todo` WHERE itemId = ?', [req.body.itemId]).then((connection) => {
-            console.log(`log deleted ${connection}`);
+        connection.query("DELETE FROM `todo` WHERE itemId = ?", [req.body.itemId]).then((connection) => {
+            console.log(connection[0]);
         })
+        console.log(connection);
         connection.end()
     })
     res.sendStatus(200);
@@ -159,7 +159,7 @@ routerIndex.post('/addItem', (req, res, next) => {
 
 // ----------------------------- REGISTRATION HANDLING ----------------------------------
 
-routerIndex.post('/register', async function(req, res, next) {
+routerIndex.post('/register', function(req, res, next) {
     const saltRounds = 10;
     const myPlaintextPassword = req.body.pass;
     bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
@@ -170,7 +170,6 @@ routerIndex.post('/register', async function(req, res, next) {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
-            port: process.env.PORT,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             connectTimeout: 0,
