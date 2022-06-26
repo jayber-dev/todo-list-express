@@ -29,7 +29,7 @@ document.getElementById('iteminput').addEventListener('keyup', (e) => {
 
     if (e.key == "Enter") {
         let itemIdString = "";
-        itemIdString = String(itemIdString += Math.floor(Math.random() * 1000000000))
+        itemIdString = String(itemIdString += Math.floor(Math.random() * 10000000))
         let userValue = e.target.value
         const req = new XMLHttpRequest();
         req.open("post", "/addItem", true);

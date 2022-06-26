@@ -14,10 +14,7 @@ routerIndex.use(session({
     name: "session",
     keys: [process.env.SECRET_KEY],
     maxAge: 24 * 60 * 60 * 1000,
-    // secret: `${process.env.SECRET_KEY}`,
-    // cookie: { maxAge: 10 * 900000 },
-    // resave: false,
-    // saveUninitialized: false
+
 }));
 
 // ------------------------ LOGIN HANDLER FUNCTION----------------------------------
@@ -28,7 +25,6 @@ const validation = (req, res, next) => {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
-
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             connectTimeout: 0,
@@ -55,6 +51,7 @@ const validation = (req, res, next) => {
             }).catch((err) => {
                 console.log(err);
             })
+            connection.end()
         })
     } else {
         req.user_logged = false;
@@ -94,6 +91,7 @@ routerIndex.get('/interface', function(req, res, next) {
             }).catch((err) => {
                 console.log(err);
             });
+            connection.end()
         });
     };
 });
@@ -112,6 +110,7 @@ routerIndex.post("/priority", (req, res, next) => {
         connection.query(`UPDATE todo SET priority = ? WHERE itemId = ?`, [req.body.priority, req.body.itemId]).then((connection) => {
 
         })
+        connection.end()
     });
 })
 
@@ -131,8 +130,8 @@ routerIndex.post('/handle', (req, res, next) => {
         connection.query(sql, [req.body.itemId]).then((connection) => {
             console.log(`log deleted ${connection[0]}`);
         })
+        connection.end()
     })
-
     res.sendStatus(200);
 })
 
@@ -149,9 +148,11 @@ routerIndex.post('/addItem', (req, res, next) => {
         connection.query(`INSERT INTO todo
                  (itemId, task, priority, user_id) 
                  VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
+        connection.end()
     }).catch((err) => {
         console.log(err);
-    })
+    });
+    res.sendStatus(200)
 
 })
 
@@ -180,6 +181,7 @@ routerIndex.post('/register', async function(req, res, next) {
                         res.redirect('/');
                     }
                 })
+            connection.end()
         })
     });
 });

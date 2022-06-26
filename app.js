@@ -55,12 +55,16 @@ const validation = function(req, res, next) {
                         } else {
                             return req.user_logged = false, next();
                         };
+
                     });
                 } else {
                     req.user_logged = false;
                     next();
                 };
-            });
+            })
+            console.log("im finishing the connection");
+            console.log(connection);
+            connection.end()
         });
 
     } else {
