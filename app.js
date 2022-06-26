@@ -75,7 +75,7 @@ app.use('/login', loginRouter);
 
 app.get('/', function(req, res, next) {
     if (req.session.user) {
-        res.sendStatus(200)
+        // res.sendStatus(200)
         res.redirect('/interface')
     }
     res.render('login', {
