@@ -177,6 +177,7 @@ routerIndex.post('/register', function(req, res, next) {
         }).then((connection) => {
             connection.query(`INSERT INTO users (fname, lname, email, country, hash_password) VALUES(?,?,?,?,?);`, [req.body.fname, req.body.lname, req.body.email, req.body.country, hash])
                 .then((connection) => {
+                    req.session.message = "Thank you for registering"
                     res.redirect('/')
 
                 })

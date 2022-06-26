@@ -6,8 +6,8 @@ block content
   
   
     
-  div(class="w3-mobile")
-    div(class="w3-animate-opacity" id="login-form")
+  div(class="")
+    div(class=" w3-animate-opacity" id="login-form")
       form(class="w3-display-middle login-form" action="/" method="POST")
         h1 Login
         
@@ -49,7 +49,7 @@ block content
             small(id="emailHelp" class="small-tag") *We'll never share your email with anyone else.
         div(class="w3-half w3-rest section-height")
           div(class="w3-margin")
-            label(for="") country 
+            label(for="") Country 
             select(class="w3-input country-box sizing " id="country" name="country")
                 <option value="Afganistan"></option>
                 <option value="Afganistan">Afghanistan</option>
@@ -299,12 +299,12 @@ block content
                 <option value="Zambia">Zambia</option>
                 <option value="Zimbabwe">Zimbabwe</option>
             div(class="w3-margin")
-                label(for="pass") password 
+                label(for="pass") Password 
                 input(type="password" class="w3-input sizing" id="password" name="pass" value="")
                 small(class="small-tag") *Password must contain one special charecter one uppercase,lowercase and one number
                 small(id="pass-tag")
             div(class="w3-margin")
-                label Varify password
+                label Verify password
                 input(type="password" class="w3-input sizing" id="password-varify" name="pass_varify" disabled)
                 <small id="pass-var-tag"></small>
         div(class="w3-margin")

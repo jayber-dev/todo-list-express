@@ -26,6 +26,7 @@ passIn.addEventListener('keyup', (e) => {
         if (passIn.value == "") {
             passTag.innerHTML = "";
         } else {
+            passTag.style.color = "white"
             passTag.innerHTML = " ** Too short minimum 8 charecters **";
             passTag.style.color = "white"
             passVar.setAttribute('disabled', 'true')
@@ -43,6 +44,7 @@ passVar.addEventListener('keyup', (e) => {
     } else {
 
         passVarTag.innerHTML = "Password does not match"
+        passVarTag.style.color = "white"
         document.getElementById('regBtnP').innerHTML = "Please fill in all the fields"
     }
 })
