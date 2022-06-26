@@ -128,8 +128,8 @@ routerIndex.post('/handle', (req, res, next) => {
         connectTimeout: 0,
         insecureAuth: true,
     }).then((connection) => {
-        connection.query(sql, [req.body.itemId]).then(connection => {
-            console.log("log deleted");
+        connection.query(sql, [req.body.itemId]).then((connection) => {
+            console.log(`log deleted ${connection[0]}`);
         })
     })
 
