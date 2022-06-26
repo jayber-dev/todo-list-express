@@ -37,7 +37,7 @@ const validation = function(req, res, next) {
             user: process.env.USER,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
-            // connectTimeout: 0,
+            connectTimeout: 0,
             insecureAuth: true,
         }).then((connection) => {
             connection.query(sql, req.body.email).then((connection) => {
