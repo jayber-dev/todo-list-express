@@ -166,6 +166,7 @@ routerIndex.post('/register', async function(req, res, next) {
         const connection = mysql.createConnection({
             host: process.env.HOST,
             user: process.env.USER,
+            port: process.env.PORT,
             password: process.env.PASSWORD,
             database: process.env.DATABASE,
             connectTimeout: 0,
