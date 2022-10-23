@@ -50,6 +50,7 @@ const validation = (req, res, next) => {
                     next();
                 }
             }).catch((err) => {
+                next(err)
                 console.log(err);
             })
             connection.end()
@@ -90,6 +91,7 @@ routerIndex.get('/interface', function(req, res, next) {
                     jslink: '/javascripts/index.js'
                 });
             }).catch((err) => {
+                next(err)
                 console.log(err);
             });
             connection.end()
@@ -151,6 +153,7 @@ routerIndex.post('/addItem', (req, res, next) => {
                  VALUES(?,?,?,?)`, [req.body.itemId, req.body.content, 1, req.session.user['userId']])
         connection.end()
     }).catch((err) => {
+        next(err)
         console.log(err);
     });
     res.sendStatus(200)
@@ -187,6 +190,7 @@ routerIndex.post('/register', function(req, res, next) {
                         res.setHeader('content-type', 'text/html');
                         req.session.message = "Email is already exist";
                         res.redirect('/');
+                        next(err)
                     }
                 })
             connection.end()
